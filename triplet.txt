@@ -1,0 +1,65 @@
+toilet-above-floor&shampoo-on-floor: 144
+toilet-above-floor&floor-below-toilet: 134
+toilet-above-floor&shampoo-next to-tub: 132
+boat-on-water&boat-on-water: 129
+sign-on-wall&shampoo-on-floor: 127
+sign-above-floor&shampoo-on-floor: 127
+sign-above-toilet&shampoo-on-floor: 127
+sign-on-wall&floor-below-toilet: 115
+sign-on-wall&shampoo-next to-tub: 115
+sign-above-floor&floor-below-toilet: 115
+sign-above-floor&shampoo-next to-tub: 115
+sign-above-toilet&floor-below-toilet: 115
+sign-above-toilet&shampoo-next to-tub: 115
+toilet-above-floor&sign-on-wall: 110
+toilet-above-floor&sign-above-floor: 110
+toilet-above-floor&sign-above-toilet: 110
+floor-below-toilet&shampoo-on-floor: 101
+toilet-next to-planter&shampoo-on-floor: 96
+man-wearing-shirt&man-wearing-pants: 90
+floor-below-toilet&shampoo-next to-tub: 89
+toilet-next to-planter&shampoo-next to-tub: 88
+toilet-above-floor&wall-behind-toilet: 85
+toilet-next to-planter&floor-below-toilet: 85
+wall-behind-toilet&shampoo-on-floor: 81
+sign-on-wall&sign-above-floor: 78
+sign-on-wall&sign-above-toilet: 78
+sign-above-floor&sign-above-toilet: 78
+toilet-above-floor&wall-has-door: 74
+toilet-next to-planter&sign-on-wall: 74
+toilet-next to-planter&sign-above-floor: 74
+toilet-next to-planter&sign-above-toilet: 74
+wall-behind-toilet&floor-below-toilet: 73
+wall-behind-toilet&shampoo-next to-tub: 73
+sign-on-wall&sign-on-wall: 69
+wall-has-door&shampoo-on-floor: 69
+sign-on-wall&wall-behind-toilet: 68
+sign-above-floor&wall-behind-toilet: 68
+sign-above-toilet&wall-behind-toilet: 68
+toilet-above-floor&toilet-above-floor: 66
+sign-above-floor&sign-on-wall: 66
+sign-above-floor&sign-above-floor: 66
+sign-above-toilet&sign-on-wall: 66
+sign-above-toilet&sign-above-floor: 66
+sign-above-toilet&sign-above-toilet: 66
+floor-below-toilet&floor-below-toilet: 66
+shampoo-on-floor&shampoo-next to-tub: 66
+shampoo-on-floor&shampoo-on-floor: 66
+shampoo-next to-tub&shampoo-on-floor: 66
+man-wearing-hat&man-wearing-shirt: 63
+sign-on-wall&wall-has-door: 62
+sign-above-floor&wall-has-door: 62
+sign-above-toilet&wall-has-door: 62
+wall-has-door&shampoo-next to-tub: 62
+wall-has-door&floor-below-toilet: 61
+toilet-above-floor&mirror-has-lights: 60
+sign-on-wall&mirror-has-lights: 60
+sign-above-floor&mirror-has-lights: 60
+sign-above-toilet&mirror-has-lights: 60
+shampoo-next to-tub&shampoo-next to-tub: 55
+toilet-next to-planter&wall-behind-toilet: 52
+toilet-above-floor&toilet-next to-planter: 51
+man-wearing-shirt&shirt-on-man: 51
+man-wearing-shirt&man-has-hair: 50
+floor-below-toilet&mirror-has-lights: 50
+guy-wearing-shirt&foot-on-skateboard: 50

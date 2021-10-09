@@ -1,0 +1,1272 @@
+is black and: 1.000000
+pole is: 1.000000
+laying: 1.000000
+giraffes: 1.000000
+are on a: 1.000000
+garage: 1.000000
+waiting to: 1.000000
+mixing: 1.000000
+lunch: 1.000000
+walk: 1.000000
+turning: 1.000000
+glows: 1.000000
+are not: 1.000000
+is covered in: 1.000000
+decorated with a: 1.000000
+drive on: 1.000000
+pile: 1.000000
+pushed: 1.000000
+sits: 1.000000
+spell: 1.000000
+sitting on the floor: 1.000000
+number is: 1.000000
+are round: 1.000000
+is very: 1.000000
+are in a: 0.985063
+painted: 0.937568
+brown: 0.930824
+form: 0.926310
+is lying: 0.901138
+look: 0.898782
+contain: 0.833333
+wearning: 0.824872
+is wearing pink: 0.807919
+are at: 0.801969
+to sides of: 0.775397
+say: 0.770076
+is full of: 0.730067
+stands: 0.714001
+held on by: 0.694142
+growing on top of: 0.684729
+full of: 0.680120
+is at the top of: 0.675596
+is embeded in: 0.657862
+reflecting: 0.655282
+treading on: 0.648166
+are walking on: 0.647761
+belong to: 0.642709
+running in: 0.637491
+cover: 0.632326
+decorate: 0.630345
+are made of: 0.629177
+is made of: 0.613034
+is as tall as: 0.611457
+with long: 0.605243
+hanging: 0.605019
+shirt: 0.604651
+lying in: 0.603091
+moving into: 0.581221
+moving: 0.579942
+run across: 0.573741
+looking through: 0.569280
+does: 0.563973
+parking on: 0.557986
+is numbered: 0.553977
+looking: 0.551480
+wrapped in: 0.549465
+standing above: 0.548531
+is hugging: 0.543823
+is being hugged by: 0.543823
+made of: 0.542504
+goes: 0.539418
+n: 0.533875
+is in middle of: 0.533721
+net to: 0.529870
+bends: 0.514432
+has foot on: 0.514418
+wait for: 0.513459
+being: 0.511349
+falling on: 0.511089
+posing near: 0.510945
+taking off on: 0.507934
+closed by: 0.505051
+gating: 0.505051
+posing on: 0.497367
+is sitting in: 0.497154
+has many: 0.492267
+made: 0.491857
+surrounds: 0.490868
+means: 0.481055
+filled with: 0.476352
+resting in: 0.471906
+is occupied by: 0.471906
+occupied by: 0.471906
+indicates: 0.470304
+lying down on: 0.466667
+feeling: 0.458216
+made out of: 0.442839
+wrapped on: 0.439908
+waiting on: 0.438545
+balancing: 0.438206
+are inside of: 0.438139
+sits in: 0.435588
+in front of the: 0.434010
+flank: 0.429631
+inside of: 0.429036
+sticking out of: 0.425000
+had: 0.420577
+wrapping: 0.417214
+lying on top of: 0.415984
+in middle of: 0.410030
+in beside: 0.408086
+house: 0.406545
+worn by: 0.404316
+turned: 0.403053
+hugged by: 0.402079
+plays: 0.401757
+guarding: 0.399607
+men: 0.394000
+servicing: 0.392888
+being serviced by: 0.392888
+buying: 0.392235
+vacuums: 0.391691
+consuming: 0.388449
+cleaning: 0.388342
+seated on: 0.386560
+folding: 0.383267
+is reflected in: 0.383214
+are in the middle of: 0.382396
+includes: 0.380169
+are covered with: 0.380002
+growing on: 0.378448
+walking on top of: 0.376972
+is shining: 0.376874
+grasps: 0.375877
+undernearth: 0.375597
+are in the: 0.373244
+sitting front of: 0.371440
+hung on: 0.371311
+parallel to: 0.367865
+of: 0.367190
+sailing on: 0.367077
+next tob: 0.366670
+as tall as: 0.366427
+are wearing: 0.365183
+too big for: 0.364583
+covered by: 0.362873
+hugging: 0.362562
+sitting: 0.357763
+floating on top of: 0.344252
+on the end of: 0.342149
+is floating on: 0.342138
+next tp: 0.341832
+is standing in front: 0.339500
+lying near: 0.337639
+parked behind: 0.335754
+lying  on: 0.333387
+lies on: 0.333387
+is along: 0.333256
+wear: 0.331158
+pats: 0.329169
+is inside: 0.325279
+wheel: 0.324688
+sandwiching: 0.324121
+weairng: 0.322983
+kissing: 0.320896
+says: 0.320060
+zipping: 0.317043
+placed around: 0.316634
+shines on: 0.314231
+is on the end of: 0.313754
+is nailed to: 0.313754
+dividing: 0.313090
+looking out: 0.312206
+knead: 0.311233
+playing at: 0.307545
+sits near: 0.306345
+support: 0.303401
+is for: 0.299459
+gesturing at: 0.299280
+lifting: 0.298960
+standing at: 0.298022
+rests: 0.297493
+napping: 0.297493
+are covered in: 0.296884
+sitting in a: 0.296336
+walking down: 0.292853
+is sleeping on: 0.291807
+are in: 0.290878
+sticked on: 0.290847
+covering: 0.289628
+moving on top of: 0.288680
+wearing a: 0.288139
+explaining: 0.287761
+showing: 0.286274
+is part of: 0.286050
+belowc: 0.284203
+is supported by: 0.283040
+is lifting: 0.283040
+rides on: 0.282741
+parked above: 0.282669
+are on top of: 0.282133
+playing in: 0.276418
+underneaeth: 0.275467
+opens: 0.273502
+standing ong: 0.273081
+grazing on: 0.272496
+posing with: 0.271292
+around: 0.270141
+waiting: 0.267486
+mounted on: 0.266464
+climbing: 0.265354
+is riding: 0.264726
+parked in: 0.264513
+anchored to: 0.261798
+have: 0.261320
+are atached to: 0.261037
+parked at: 0.260338
+are around: 0.258718
+walks on: 0.258376
+are touching: 0.257447
+drawn on: 0.257248
+on a: 0.253093
+face: 0.252520
+is in a: 0.251817
+white: 0.251802
+as: 0.251794
+contains: 0.251585
+rides: 0.251451
+lying down near: 0.250477
+is resting on: 0.250445
+standing on top of: 0.249973
+guiding: 0.249724
+is surrounding: 0.249624
+is wearing: 0.247448
+moving on: 0.246638
+is wearing yellow: 0.246240
+stopped at: 0.245699
+looking into: 0.245237
+supporting: 0.244135
+through: 0.244090
+sitting in: 0.243972
+is parked on: 0.242123
+wearnig: 0.241926
+manipulating: 0.241536
+reaching into: 0.241092
+in behind: 0.240936
+is at the: 0.240654
+protecting: 0.239789
+part of: 0.239514
+is petting: 0.233603
+is walking on: 0.233344
+sits on: 0.232666
+folds: 0.232250
+newer than: 0.232082
+is in the front of: 0.231472
+next tos: 0.231313
+is open at: 0.231170
+wearing: 0.230294
+running towards: 0.229453
+slowly walking on: 0.228535
+skating on: 0.228023
+sitting on: 0.228021
+along: 0.225880
+are parked beside: 0.224367
+is leaning against: 0.224346
+feeding on: 0.224020
+tugging: 0.222222
+is between: 0.219760
+not: 0.219436
+sleeping on: 0.218840
+kneeling above: 0.218818
+is jumping with: 0.218443
+is against: 0.218270
+on left: 0.218110
+chained to: 0.217752
+resting on: 0.217727
+attach to: 0.217636
+in: 0.216623
+swimming in: 0.214783
+is wearing a: 0.214388
+walkign on: 0.214268
+driving beside: 0.213950
+in the head of: 0.212077
+running on: 0.211833
+ridings: 0.211512
+pushes: 0.210733
+are hanging on: 0.210087
+grow from: 0.208914
+infront  of: 0.208125
+wears: 0.207956
+shorter than: 0.207630
+ride: 0.206939
+causing: 0.205030
+bending: 0.204814
+floating: 0.204070
+jumping in: 0.203898
+outside: 0.203302
+inside: 0.203294
+between: 0.202688
+is sitting on: 0.202547
+sleeps on: 0.202448
+built on: 0.202006
+has on: 0.201381
+lying above: 0.200367
+wheeling: 0.200162
+protects: 0.200107
+wearign: 0.199756
+hangs on: 0.197019
+carrying: 0.196812
+sitting behind: 0.196558
+is swinging: 0.194788
+pulled by: 0.194684
+is in the middle of: 0.194531
+built on top of: 0.194491
+connects to: 0.193991
+parked on: 0.193967
+riding: 0.193945
+blocking: 0.193784
+is about: 0.193570
+pn: 0.192900
+steered with: 0.191557
+down: 0.191330
+stopped on: 0.189377
+are on: 0.189224
+need: 0.188983
+floats on: 0.188795
+lying next to: 0.188362
+carries: 0.188077
+in back of: 0.188031
+can: 0.187771
+sitting below: 0.186894
+riding on: 0.186075
+runs with: 0.184156
+surfing on: 0.182052
+covered in: 0.181793
+skateboarding on: 0.181383
+trapping: 0.181373
+besdie: 0.180440
+resting near: 0.178587
+growing out of: 0.178458
+are beside the: 0.178082
+listening to: 0.177553
+hang on: 0.176175
+crosses: 0.175872
+weaing: 0.174665
+must have: 0.173941
+has: 0.173786
+is pulling out of: 0.173340
+shows: 0.173241
+drawing: 0.172756
+is by the: 0.172641
+standing in front of: 0.172571
+is pushing: 0.172201
+features: 0.171831
+standing beside: 0.171604
+fixing: 0.171484
+requires: 0.171408
+locking: 0.170264
+speeding on: 0.170173
+lying on: 0.169994
+is using: 0.169540
+rolling behind: 0.168724
+playing on: 0.168574
+adjacent to: 0.168534
+is sitting at: 0.166721
+crossing: 0.166301
+is leaning on: 0.164201
+is standing beside: 0.164147
+stepping on: 0.163483
+walks: 0.163238
+facing: 0.162609
+rolled on: 0.161981
+overlook: 0.161348
+sticked onto: 0.161179
+standing on: 0.161094
+connected to: 0.161018
+teaching: 0.160769
+surrounding: 0.160191
+gliding on: 0.159850
+hold: 0.159479
+stands on: 0.158042
+standing front of: 0.157778
+is  on: 0.157555
+is in: 0.156479
+before: 0.156309
+carying: 0.156209
+are beyond: 0.156191
+written on: 0.155133
+at: 0.154801
+in between: 0.154085
+against: 0.154038
+standing next to: 0.153790
+drinking: 0.153586
+with: 0.152203
+moving in: 0.151745
+covers: 0.151288
+on the back of: 0.150997
+is parked: 0.150356
+standing  behind: 0.150305
+underneath: 0.150077
+taller than: 0.149875
+pushing: 0.149335
+standing in: 0.148942
+pulling: 0.148783
+ties: 0.148161
+waiting at: 0.147696
+ias: 0.147444
+driving on: 0.147394
+sitting at: 0.147002
+loading: 0.146919
+making: 0.146328
+reading: 0.146321
+inbetween: 0.146234
+touching: 0.146226
+on top of: 0.146010
+jumps on: 0.145753
+on: 0.145262
+loaded onto: 0.145079
+hair: 0.144678
+is beneath: 0.144664
+squashing: 0.144278
+walking away from: 0.143967
+matches: 0.143956
+in fron: 0.143189
+on the: 0.143068
+drawing on: 0.142601
+are near: 0.142344
+leaning on: 0.142324
+is shorter than: 0.142230
+is parked in: 0.142175
+surrounded by: 0.141974
+needs: 0.141877
+helps: 0.141877
+are tucked into: 0.141342
+floating on: 0.140429
+in a: 0.139901
+are in front of: 0.139095
+hauling: 0.138616
+attatched to: 0.138607
+is facing: 0.137750
+floating above: 0.137532
+sniffing: 0.137359
+talking to: 0.137276
+is on: 0.136709
+looking down at: 0.136619
+stopped next to: 0.136488
+reading on: 0.136318
+holding: 0.135953
+printed on: 0.135482
+eating from: 0.133949
+growing near: 0.133593
+stand: 0.133565
+wrapped around: 0.133468
+spans across: 0.133437
+exploring: 0.133371
+holds: 0.133329
+is connected to: 0.133255
+working on: 0.133015
+tucked into: 0.132768
+older than: 0.132678
+has no: 0.132576
+shoveling: 0.132508
+goes into: 0.132495
+tied to: 0.132339
+is on top: 0.131818
+covered with: 0.131779
+sits at: 0.131364
+sitting above: 0.131170
+hang from: 0.130988
+raises: 0.130757
+is closed with: 0.130121
+in front: 0.129921
+sitting in front of: 0.129786
+blows: 0.128825
+is beside the: 0.128546
+wearing plaid: 0.128184
+jumping with: 0.127946
+has a: 0.127106
+sit on: 0.127039
+on the right of: 0.126882
+driving over: 0.126538
+parked outside: 0.125843
+ontop of: 0.125840
+stacked on: 0.125810
+in the: 0.125678
+pasted on: 0.124601
+reflects in: 0.124563
+walking next to: 0.124497
+petting: 0.124391
+infront of: 0.124194
+rolling on: 0.124108
+is hanging: 0.124091
+going under: 0.123797
+is working on: 0.123521
+is on top of: 0.123504
+is before: 0.123478
+is around: 0.122800
+leans on: 0.122700
+surround: 0.122319
+is taller than: 0.121812
+laying on: 0.121528
+thinking on: 0.121300
+watch: 0.121127
+talks to: 0.120605
+dancing with: 0.120236
+is hooked to: 0.120151
+hooked: 0.120151
+is in front of the: 0.119597
+is by: 0.119185
+in center of: 0.119104
+among: 0.119040
+within: 0.119022
+extending to: 0.118740
+alongside: 0.118487
+stands next to: 0.118209
+shining from: 0.117678
+carried by: 0.117651
+abouve: 0.117640
+drives: 0.117363
+wiping: 0.117279
+hanging over: 0.117133
+is underneath: 0.117068
+beneath: 0.116987
+stowing: 0.116843
+disturbs: 0.116447
+standing by: 0.116202
+parked near: 0.115645
+holding onto: 0.115623
+walking on: 0.115431
+separating: 0.115217
+is carrying: 0.115152
+sitting beside: 0.115057
+stopped in: 0.114687
+stretching: 0.114442
+is over: 0.113286
+is above the: 0.113193
+displaying: 0.113073
+hanging on: 0.112697
+admiring: 0.112378
+afloat on: 0.112180
+holding up: 0.111986
+knealing by: 0.111985
+is painted on: 0.111890
+overlooks: 0.110511
+eating: 0.110402
+has more hair than: 0.110145
+is equal size of: 0.110145
+kneeling on: 0.109862
+parked next to: 0.109821
+hanging in: 0.109687
+running on top of: 0.109609
+supports: 0.109154
+circle: 0.109060
+next: 0.109012
+climbs: 0.108049
+hanging from: 0.107590
+in the middle of: 0.106949
+is on the: 0.106858
+leaning against: 0.106805
+is hanging on: 0.105933
+ond: 0.105874
+boards: 0.105492
+is in front of: 0.105205
+is standing on: 0.105038
+perched on: 0.104769
+looking over: 0.104407
+hiding under: 0.104393
+sleeping near: 0.104323
+rooted in: 0.104167
+built into: 0.104048
+is holding: 0.102924
+are on the: 0.102256
+attached to: 0.102214
+reflected in: 0.102197
+utilizing: 0.101671
+in the center of: 0.101642
+and: 0.101129
+parked in front of: 0.100691
+passing out: 0.100480
+binding: 0.100116
+front of: 0.100106
+resting arm on: 0.100086
+are behind: 0.099888
+cheering: 0.099635
+standing near: 0.099154
+points: 0.098870
+held by: 0.098568
+walking with: 0.098514
+behind: 0.098510
+sitting next to: 0.098123
+jumping: 0.098053
+standing: 0.097854
+is against the: 0.097669
+socializing on: 0.097624
+painted on: 0.097416
+in front of: 0.097275
+is rolling: 0.097204
+are next to: 0.097193
+producing: 0.095826
+expells: 0.095826
+under: 0.095146
+bolted to: 0.094939
+is under: 0.094451
+wearings: 0.094208
+studying: 0.093672
+casting: 0.093615
+is behind: 0.092845
+supported by: 0.092285
+touches: 0.091446
+belongs to: 0.091352
+pulls: 0.090186
+anchored near: 0.090130
+heading towards: 0.090082
+cutting: 0.090028
+playing: 0.089911
+crashing on: 0.089621
+wesrs: 0.089101
+is standing next to: 0.089011
+resting at: 0.089006
+bike: 0.088323
+is hanging from: 0.088169
+behing: 0.087642
+is touching: 0.087019
+is attached to: 0.086383
+long: 0.085943
+goes under: 0.085868
+inbedded in: 0.085690
+is standing in: 0.085191
+next to: 0.085163
+along side: 0.085031
+eating out of: 0.084948
+next  to: 0.084744
+attached ot: 0.084406
+towing: 0.084326
+is beside: 0.083842
+brushes: 0.083775
+holding hands with: 0.083762
+hangs from: 0.083479
+attachted to: 0.083464
+hits: 0.083462
+drives in: 0.083333
+waxing: 0.083167
+lining: 0.083146
+benesth: 0.082908
+is pouring: 0.082671
+cuts: 0.082353
+are hanging from: 0.081937
+across: 0.081791
+on edge of: 0.081697
+bending towards: 0.080444
+stopped near: 0.080438
+handles: 0.080413
+coming from: 0.079982
+casts: 0.079811
+swinging: 0.079650
+bows: 0.079571
+are under: 0.079516
+listen to: 0.079479
+is next to: 0.079302
+walking in front of: 0.079069
+past: 0.078841
+driving near: 0.078775
+using: 0.078680
+is smaller than: 0.078552
+are over: 0.078446
+stack on: 0.077776
+held up by: 0.077749
+off: 0.077369
+protected by: 0.077326
+walking near: 0.077094
+walking beside: 0.077068
+carring: 0.076991
+match: 0.076607
+steering: 0.076290
+shining on: 0.076170
+pull: 0.076168
+eat: 0.076161
+is infront of: 0.076026
+leading: 0.075559
+is tied to: 0.075186
+wearin: 0.074336
+is propped against: 0.074331
+eats: 0.074034
+over: 0.073901
+by: 0.073533
+balancing on: 0.072887
+leading to: 0.072417
+beside: 0.072129
+driving: 0.071914
+has a front: 0.071655
+grabbing: 0.071600
+nextto: 0.071586
+besides: 0.071579
+laying in: 0.071271
+are beside: 0.070593
+heading near: 0.070312
+sprayed on: 0.069966
+behnid: 0.069847
+with a: 0.069440
+doing tricks on: 0.069141
+moving under: 0.067958
+occludes: 0.067925
+aboev: 0.067689
+crouching on: 0.067469
+is filled: 0.067214
+at top of: 0.067095
+moving out from: 0.066946
+signals: 0.066767
+below: 0.066478
+touch: 0.066433
+driving down: 0.066390
+sitting under: 0.065567
+running under: 0.065355
+scratching his: 0.065136
+higher than: 0.064988
+releasing: 0.064952
+walking: 0.064609
+near: 0.064446
+on bottom of: 0.064420
+flying in: 0.064173
+stuck on: 0.063794
+is driving: 0.063649
+has around neck: 0.063621
+running over: 0.063506
+swings: 0.063221
+on the end of the: 0.063070
+has blond: 0.063019
+leaving: 0.062882
+is at the back of: 0.062582
+is in the: 0.062375
+jumping on: 0.062367
+is at rear of: 0.062312
+taped to: 0.062012
+behindt: 0.061876
+hanging next to: 0.061675
+larger than: 0.061577
+walking through: 0.061441
+are below: 0.061394
+attaches to: 0.060595
+pours: 0.060519
+helping: 0.060452
+is at back of: 0.060363
+grazing: 0.060093
+on back of: 0.059151
+is brighter than: 0.059112
+walking across: 0.059000
+neatly stacked near: 0.058980
+talking into: 0.058929
+is near: 0.058672
+used: 0.058592
+jumping over: 0.058577
+following: 0.058574
+to: 0.058316
+sitting near: 0.058298
+at bottom of: 0.057829
+created: 0.057775
+taped onto: 0.057685
+boarding: 0.057129
+is across from: 0.057114
+receiving: 0.056949
+goes over: 0.056505
+attached by: 0.056346
+uses: 0.056226
+plastered on: 0.056221
+standing behind: 0.055907
+is across the: 0.055535
+bites: 0.055477
+bending near: 0.055267
+writing on: 0.055165
+is below: 0.055118
+looks at: 0.054617
+standing besides: 0.054547
+falls off: 0.054132
+moving near: 0.054102
+paralle to: 0.053891
+hearding: 0.053641
+leads to: 0.053572
+fitted in: 0.053189
+looking at: 0.053171
+above: 0.052805
+stands near: 0.052780
+sticking out from: 0.052778
+cut: 0.052616
+in rear of: 0.052488
+plugs into: 0.052471
+on end of: 0.052327
+is besides: 0.052219
+planted in: 0.052084
+gesturing with: 0.051932
+are above: 0.051796
+looking at a: 0.051551
+going to top of: 0.051454
+plugged in: 0.051432
+smelling: 0.051345
+controlling: 0.050589
+is on back of: 0.050530
+smaller than: 0.050281
+adjusting: 0.050235
+makes: 0.049910
+stands in: 0.049651
+is watching: 0.049292
+writing: 0.048980
+leaves: 0.048889
+floatingo n: 0.048676
+herding: 0.048487
+connected by: 0.048269
+writes on: 0.048178
+pointing: 0.047895
+adjusts: 0.047805
+has on a: 0.047695
+is above: 0.047446
+sitting inside: 0.047138
+are attached to: 0.046792
+on side of: 0.046450
+in top of: 0.046208
+are standing around: 0.046065
+from: 0.045763
+does tricks on: 0.045691
+sitting on top of: 0.045306
+on the side of: 0.045121
+approaching: 0.045052
+is on side of: 0.045031
+are above the: 0.044756
+parked beside: 0.044495
+are left of: 0.044431
+on front of: 0.043907
+is inside of: 0.043664
+reads: 0.043188
+cooking: 0.043175
+to the right of: 0.043172
+kicked by: 0.043043
+kicked: 0.043043
+walking in: 0.042930
+are to the left of: 0.042861
+beyond: 0.042425
+stacked behind: 0.042299
+far from: 0.042298
+outside of: 0.042136
+are to the right of: 0.042043
+pver: 0.042040
+directing: 0.041953
+right of: 0.041617
+orage safety lable: 0.041489
+pinned onto: 0.041244
+laying besides: 0.041222
+are sitting in: 0.040391
+is shorter: 0.040263
+balanced on: 0.040254
+nex to: 0.039941
+sucks on: 0.039547
+stradling: 0.039242
+runs through: 0.039118
+watching: 0.038997
+selling: 0.038813
+pouring: 0.038309
+flows under: 0.038284
+are having fun: 0.038016
+are enjoying the: 0.038016
+provides: 0.037440
+stacked in: 0.037279
+is on the right of: 0.037121
+skates on: 0.037017
+snowboarding on: 0.036954
+glued to: 0.036905
+gesturing to: 0.036602
+shaking: 0.036444
+on top op: 0.036337
+falling off: 0.036335
+stops: 0.036270
+cooks: 0.036185
+flying near: 0.035928
+missing: 0.035532
+is larger than: 0.035292
+opposite: 0.035284
+attached tot: 0.034608
+is wearing red: 0.034397
+at end of: 0.034080
+waiting near: 0.033898
+to the left of: 0.033729
+in the front of: 0.033479
+boxing in: 0.033427
+spread around: 0.033293
+see: 0.033290
+viewing: 0.033234
+across from: 0.033043
+handing: 0.032733
+serenades: 0.032473
+left of: 0.032463
+is eating: 0.031839
+marks: 0.031810
+in the back of: 0.031708
+talking on: 0.031674
+sees: 0.031586
+is to the left of: 0.031186
+feeding: 0.030517
+is right of: 0.030486
+one: 0.030367
+taking: 0.030273
+bolted onto: 0.030193
+is held by: 0.029889
+moving next to: 0.029815
+stepping in: 0.029714
+suports: 0.029654
+guides: 0.029646
+hase: 0.029388
+blown out into: 0.029387
+about: 0.029370
+is covered with: 0.029325
+entering: 0.029229
+siting on: 0.029130
+hanging off: 0.028794
+biting: 0.028287
+is at: 0.028098
+throwing: 0.028043
+in side of: 0.028011
+parked by: 0.027987
+looks for change in: 0.027802
+roof is: 0.027790
+at the bottom of: 0.027784
+runs in: 0.027725
+are beneath: 0.027706
+sharpening: 0.027655
+taking picture of: 0.027646
+recording: 0.027388
+skiing on: 0.027220
+working inside: 0.027217
+serves: 0.027120
+nera: 0.026939
+amongst: 0.026454
+placed on: 0.026326
+playing with: 0.026122
+under the: 0.026035
+is on front of: 0.025848
+wearingb: 0.025649
+is close to: 0.025593
+bowing to: 0.025478
+shades: 0.025063
+building: 0.025034
+passing: 0.024872
+look at: 0.024869
+visit: 0.024769
+is left of: 0.024716
+aiming for: 0.024700
+looking past: 0.024211
+is plugged into: 0.024194
+watches: 0.024039
+bitting: 0.024034
+walking to: 0.023979
+plugged into: 0.023874
+near by: 0.023857
+adjacent ot: 0.023715
+faces: 0.023343
+washing: 0.022862
+on the bottom of: 0.022688
+mixed with: 0.022376
+stands in front of: 0.022373
+cuffs: 0.022366
+giving: 0.022361
+kicking: 0.022307
+are right of: 0.022212
+satnding near: 0.022180
+reflects: 0.022178
+strapped onto: 0.021885
+rising on: 0.021872
+rides in: 0.021691
+is next  to: 0.021467
+walks in: 0.021199
+are inside: 0.021067
+carved into: 0.021040
+playing against: 0.020739
+is with: 0.020528
+hold up: 0.020522
+sucks: 0.020246
+is on q: 0.019767
+is darker than: 0.019704
+shading: 0.019555
+catches: 0.019457
+bounces: 0.019402
+is behind the: 0.019341
+stand in: 0.019172
+chasing: 0.018769
+is walking towards: 0.018663
+greener than: 0.018639
+is on the back of: 0.018414
+drinking out of: 0.018263
+is near rear of: 0.018019
+attached on: 0.017964
+going over: 0.017952
+biting on: 0.017634
+drinks: 0.017408
+holding a: 0.017366
+flying: 0.017221
+looks down: 0.017139
+praising: 0.017027
+operating: 0.016591
+blowing: 0.016491
+taking photo with: 0.016277
+ehind: 0.016113
+follows: 0.015804
+reaching for: 0.015644
+emitting out: 0.015517
+getting on: 0.015454
+is passing: 0.015262
+browsing: 0.015007
+resting: 0.014932
+has reflective: 0.014908
+on corner of: 0.014352
+is reflecting off: 0.014133
+talking near: 0.013945
+kicks: 0.013738
+onb: 0.013646
+to left of: 0.013603
+points at: 0.013601
+separated by: 0.013481
+meets: 0.013463
+behinds: 0.013253
+border: 0.013152
+is under the: 0.012890
+is beind: 0.012644
+extending: 0.012552
+peels: 0.012337
+shearing: 0.012331
+sticking through: 0.012209
+forming in: 0.012130
+is ahead of: 0.012015
+sticks out of: 0.011853
+is out of: 0.011713
+pets: 0.011682
+leaning up agains: 0.011625
+tied on: 0.011618
+has a lot of: 0.011465
+creates: 0.011453
+shaking hands with: 0.011388
+named: 0.011246
+matching: 0.011071
+is holing a: 0.010956
+pas: 0.010781
+is to the right of: 0.010726
+parked: 0.010598
+is left of the: 0.010547
+hanging out of: 0.010472
+flies in: 0.010425
+spreading: 0.010416
+bellow: 0.010342
+about to hit: 0.010325
+sells: 0.010052
+stopped in front of: 0.009950
+smiling: 0.009707
+throws: 0.009631
+texting on: 0.009538
+on left of: 0.009370
+on way to: 0.009351
+operates: 0.009338
+goes to: 0.009282
+docked near: 0.009260
+sittign: 0.009207
+cast: 0.009026
+unpacking: 0.009025
+catching: 0.008898
+closing: 0.008779
+stands by: 0.008667
+opening: 0.008603
+playing games in: 0.008595
+walking toward: 0.008556
+is lying on: 0.008158
+walk by: 0.008106
+drives on: 0.008005
+is lying across: 0.008001
+abovw: 0.007840
+is holding a: 0.007494
+holstered on: 0.007382
+protect: 0.007266
+flying above: 0.007097
+to the left: 0.007045
+growing from: 0.006884
+is front of: 0.006876
+cleansed by: 0.006689
+cleans: 0.006689
+laying against: 0.006655
+sharing: 0.006643
+in the back of the: 0.006372
+adorns: 0.006328
+are connected to: 0.006300
+hitting: 0.006269
+infront: 0.006087
+with painted: 0.005491
+is supported to: 0.005322
+shields: 0.005115
+bouncing: 0.005089
+dribbling: 0.005089
+has an: 0.005029
+for: 0.005016
+walking towards: 0.004973
+are pulling: 0.004880
+is growing: 0.004782
+is crossing: 0.004751
+ahead of: 0.004733
+is below the: 0.004568
+stacked next to: 0.004556
+lighting: 0.004505
+smoking: 0.004427
+spraying: 0.004321
+checking: 0.004274
+is looking at: 0.004173
+raising: 0.004134
+preparing: 0.003948
+floating in: 0.003683
+tied above: 0.003488
+stuck to: 0.003395
+is on the left of: 0.003252
+are on front of: 0.003138
+approaches: 0.003064
+provide: 0.002860
+looking in: 0.002778
+twisting: 0.002737
+blowing at: 0.002702
+is to right of: 0.002702
+to right of: 0.002695
+serving: 0.002433
+surfing: 0.002389
+reflected on: 0.002206
+stopping at: 0.002170
+coming out of: 0.002160
+close to: 0.002018
+opposite of: 0.001994
+grills: 0.001713
+sucking: 0.001434
+dices: 0.001336
+photographing: 0.001300
+picking: 0.001267
+at the top of: 0.001106
+is serving: 0.001057
+out to: 0.000949
+is grazing in: 0.000866
+is lower than: 0.000859
+blows out: 0.000740
+are in blue: 0.000681
+trying to touch: 0.000602
+is higher than: 0.000573
+flies: 0.000385
+is supporting: 0.000330
+sticking: 0.000277
+is to left of: 0.000246
+b: 0.000059
+pointing to: 0.000000
+is as long as: 0.000000
+slides to: 0.000000
+hangs over: 0.000000
+is near the: 0.000000
+broke: 0.000000
+breaks: 0.000000
+is moving towards: 0.000000
+to the right: 0.000000
+is lef of: 0.000000
+behine: 0.000000
+are smaller than: 0.000000
+is leading: 0.000000
+shelters: 0.000000
+right: 0.000000
+far away from: 0.000000
+wants: 0.000000
+is attched to: 0.000000
+shove: 0.000000
+und: 0.000000
+hit: 0.000000
+is right of the: 0.000000
+juggling: 0.000000
+hanging above: 0.000000
+tosses: 0.000000
+driving away from: 0.000000
+threw: 0.000000
+is pointing towards: 0.000000
+walking past: 0.000000
+waiting for: 0.000000
+is blowing: 0.000000
+pointing at: 0.000000
+containing: 0.000000
+is across road from: 0.000000
+is far from: 0.000000
+smiles next to: 0.000000
+driving past: 0.000000
+are to right of: 0.000000
+acrosst: 0.000000
+in front on: 0.000000
+plays with: 0.000000
+some: 0.000000
+is driving past: 0.000000
+are walking past: 0.000000
+trying to hit: 0.000000
+ready to hit: 0.000000
+away from: 0.000000
+filming: 0.000000
+nexy to: 0.000000
+far fromt: 0.000000
+diagonal to: 0.000000
+perpendicular to: 0.000000
+standing under: 0.000000
+in next to: 0.000000
+pointed at: 0.000000
+taking off from: 0.000000
+flying from: 0.000000
+is sitting: 0.000000
+empty drawers: 0.000000
+open fridge: 0.000000
+glass mixing bowl: 0.000000
+aboe: 0.000000
+in near: 0.000000
+to  left of: 0.000000
+sleeping next to: 0.000000
+falls on: 0.000000
+walk on: 0.000000
+is reflected on: 0.000000
+is not on: 0.000000
+undr: 0.000000
+bicycling near: 0.000000
+are atached: 0.000000
+flying over: 0.000000
+covererd by: 0.000000
+hooked up to: 0.000000
+reflected: 0.000000
+is flying: 0.000000
+castign: 0.000000
+are far from: 0.000000
+is walking next to: 0.000000
+swimming: 0.000000
+is to the left: 0.000000
+pumping: 0.000000
+fed by: 0.000000
+helping make: 0.000000
+exhausting: 0.000000
+is billowing from: 0.000000
+emitting: 0.000000
+is attached  to: 0.000000
+tucked in: 0.000000
+is from: 0.000000
+going towards: 0.000000
+collecting: 0.000000
+shone on by: 0.000000
+level with: 0.000000
+beisde: 0.000000
+is neare: 0.000000
+ignoring: 0.000000
+is stopped for: 0.000000
+is opposite: 0.000000
+is closer than: 0.000000
+is farther away than: 0.000000
+skateboarding in: 0.000000
+is pulling: 0.000000
+tied by: 0.000000
+is following: 0.000000
+plugged in to: 0.000000
+stopping: 0.000000
+stopped by: 0.000000
+compliments: 0.000000
+is hanging above: 0.000000
+walking under: 0.000000
+is the to right of: 0.000000
+seeing the: 0.000000
+moving to: 0.000000
+asking: 0.000000
+is right or: 0.000000
+reaching: 0.000000
+taking pictures of: 0.000000
+light is: 0.000000
+bene: 0.000000
+checking out: 0.000000
+licking: 0.000000
+is behing: 0.000000
+belowt: 0.000000
+to the side of: 0.000000
+bedside: 0.000000
+served: 0.000000
