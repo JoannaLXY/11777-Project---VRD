@@ -26,7 +26,7 @@ def draw_bbox_image(img, bboxes, scores, conf=0.3):
 # data dir
 TrainLabelFile = '/media/DataDrive/datasets/VRD/sg_dataset/sg_train_annotations.json'
 TrainImageDir = '/media/DataDrive/datasets/VRD/sg_dataset/sg_train_images'
-saveDir = '/media/DataDrive/datasets/VRD/maskrcnn_res/'
+saveDir = '/media/DataDrive/datasets/VRD/maskrcnn_res/detection'
 
 # read labels info
 with open(TrainLabelFile, 'r') as f:
@@ -40,18 +40,6 @@ model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 model.to(device)
 model.eval()
 
-'''
-file_no = 1
-file_dir = os.path.join(TrainImageDir, TrainLabel[file_no]['filename'])
-ori_img = Image.open(os.path.join(TrainImageDir, TrainLabel[file_no]['filename']))
-img = np.array(ori_img).transpose(2,0,1) / 255. 
-img = torch.Tensor(img).unsqueeze(0)
-results = model(img)
-bboxes = results[0]['boxes'].detach().numpy()
-scores = results[0]['scores'].detach().numpy()
-draw_bbox_image(ori_img, bboxes, scores)
-ori_img.save(os.path.join(saveDir, 'detection', TrainLabel[file_no]['filename']))
-'''
 # run on mask rcnn 
 for current_image_dict in tqdm(TrainLabel):
     ori_img = Image.open(os.path.join(TrainImageDir, current_image_dict['filename']))
@@ -62,5 +50,5 @@ for current_image_dict in tqdm(TrainLabel):
     bboxes = results[0]['boxes'].detach().cpu().numpy()
     scores = results[0]['scores'].detach().cpu().numpy()
     draw_bbox_image(ori_img, bboxes, scores)
-    ori_img.save(os.path.join(saveDir, 'detection', current_image_dict['filename']))
+    ori_img.save(os.path.join(saveDir, current_image_dict['filename']))
 	
