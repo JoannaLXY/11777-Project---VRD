@@ -31,7 +31,7 @@ def vis_bbox(box, img):
     vis_img = cv2.rectangle(vis_img,
                             (int(box[0]), int(box[1])),
                             (int(box[2]), int(box[3])),
-                            (255, 0, 0), 1)
+                            (0, 0, 255), 5)
     return vis_img
 
 DATA_PATH = "/Users/Mr.King/sg_dataset"
@@ -45,6 +45,11 @@ dataloader = DataLoader(trainset, batch_size=batch_size, shuffle=False, pin_memo
                         collate_fn=trainset.collate_batch)
 
 progress_bar = tqdm.tqdm(total=len(dataloader), leave=True)
+
+target_subobjs = ["cars-line", "photo-frame", "flags-poles", "clothes-closet", "glove-hands", "tshirt-man", "rug-flowers", "cabinets-wood", "wallpaper-wall",
+                  "hat-backpack", "arms-shoes", "pillows-table"]
+target_rels = ["are on a", "decorated with a", "is covered in", "drive on", "contain",
+               "smaller than", "looking at a", "on side of", "are above", "standing besides"]
 
 relation_iou = defaultdict(float) # store ious for each relation
 subobj_iou = defaultdict(float) # store ious for each sub-obj pair
@@ -72,9 +77,21 @@ for data in dataloader:
         subobj_count[subobj_key] += 1
         relation_iou[relation] += iou
         relation_count[relation] += 1
+        # save example images
+        if subobj_key in target_subobjs:
+            # draw bbox
+            vis_img1 = vis_bbox(subject_box, img)
+            vis_img1 = vis_bbox(object_box, vis_img1)
+            cv2.imwrite("examples/%s_%d.png"%(subobj_key, cnt), vis_img1)
+        if relation in target_rels:
+            # draw bbox
+            vis_img2 = vis_bbox(subject_box, img)
+            vis_img2 = vis_bbox(object_box, vis_img2)
+            cv2.imwrite("examples/%s_%d.png" % (relation, cnt), vis_img2)
     progress_bar.update()
 progress_bar.close()
 
+'''
 # sort on average for each relation and for each sub-obj pair
 for key in subobj_iou:
     subobj_iou[key] = subobj_iou[key] / subobj_count[key]
@@ -101,6 +118,7 @@ f.close()
 f = open("rel.txt", "w+")
 f.writelines(sorted_relation_strs)
 f.close()
+'''
 
 print("vision-based relationship analysis done.")
 
