@@ -35,7 +35,7 @@ for current_image_dict in tqdm(TrainLabel):
     img = img.cuda()
     features_dict = model(img)
     for key in features_dict.keys():
-        feature = np.squeeze(results[key].detach().cpu().numpy()).transpose(1,2,0)
+        feature = np.squeeze(features_dict[key].detach().cpu().numpy()).transpose(1,2,0)
         feature = np.max(feature, axis=2)
         feature = (255 * feature / np.max(feature)).astype(np.int32)
         img = Image.fromarray(np.uint8(feature))
