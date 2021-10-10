@@ -49,12 +49,13 @@ progress_bar = tqdm.tqdm(total=len(dataloader), leave=True)
 target_subobjs = ["cars-line", "photo-frame", "flags-poles", "clothes-closet", "glove-hands", "tshirt-man", "rug-flowers", "cabinets-wood", "wallpaper-wall",
                   "hat-backpack", "arms-shoes", "pillows-table"]
 target_rels = ["are on a", "decorated with a", "is covered in", "drive on", "contain",
-               "smaller than", "looking at a", "on side of", "are above", "standing besides"]
+               "smaller than", "looking at a", "on side of", "standing besides"]
+# target_subobjs = ["the x-yellow", "boy-white", "boats-each other"]
+# target_rels = []
 
-relation_iou = defaultdict(float) # store ious for each relation
-subobj_iou = defaultdict(float) # store ious for each sub-obj pair
-relation_count = defaultdict(int) # store appearance freq for each relation
-subobj_count = defaultdict(int) # store appearance freq for each sub-obj pair
+relation_iou = defaultdict(list) # store ious for each relation
+subobj_iou = defaultdict(list) # store ious for each sub-obj pair
+triplet_iou = defaultdict(list) # store ious for each triplet
 cnt = 0
 for data in dataloader:
     cnt += 1
@@ -73,10 +74,10 @@ for data in dataloader:
         box2 = torch.tensor([object_box], dtype=torch.float)
         iou = bops.box_iou(box1, box2)
         subobj_key = "%s-%s"%(subject, object)
-        subobj_iou[subobj_key] += iou
-        subobj_count[subobj_key] += 1
-        relation_iou[relation] += iou
-        relation_count[relation] += 1
+        triplet_key = "%s-%s-%s"%(subject, relation, object)
+        subobj_iou[subobj_key].append(iou)
+        triplet_iou[triplet_key].append(iou)
+        relation_iou[relation].append(iou)
         # save example images
         if subobj_key in target_subobjs:
             # draw bbox
@@ -91,26 +92,40 @@ for data in dataloader:
     progress_bar.update()
 progress_bar.close()
 
-'''
 # sort on average for each relation and for each sub-obj pair
+subobj_iou_mean, subobj_iou_var = {}, {}
 for key in subobj_iou:
-    subobj_iou[key] = subobj_iou[key] / subobj_count[key]
-sorted_subobj_iou = dict(sorted(subobj_iou.items(), key=lambda item: item[1], reverse=True))
+    subobj_iou_mean[key] = np.mean(subobj_iou[key])
+    subobj_iou_var[key] = np.var(subobj_iou[key])
+sorted_subobj_iou = dict(sorted(subobj_iou_mean.items(), key=lambda item: item[1], reverse=True))
 # convert to strings
 sorted_subobj_strs = []
 for key in sorted_subobj_iou:
-    curr_str = "%s: %f\n"%(key, sorted_subobj_iou[key])
+    curr_str = "%s: %f, %f\n"%(key, subobj_iou_mean[key], subobj_iou_var[key])
     sorted_subobj_strs.append(curr_str)
 
+rel_iou_mean, rel_iou_var = {}, {}
 for key in relation_iou:
-    relation_iou[key] = relation_iou[key] / relation_count[key]
-sorted_relation_iou = dict(sorted(relation_iou.items(), key=lambda item: item[1], reverse=True))
+    rel_iou_mean[key] = np.mean(relation_iou[key])
+    rel_iou_var[key] = np.var(relation_iou[key])
+sorted_relation_iou = dict(sorted(rel_iou_mean.items(), key=lambda item: item[1], reverse=True))
 # convert to strings
 sorted_relation_strs = []
 for key in sorted_relation_iou:
-    curr_str = "%s: %f\n"%(key, sorted_relation_iou[key])
+    curr_str = "%s: %f, %f\n"%(key, rel_iou_mean[key], rel_iou_var[key])
     sorted_relation_strs.append(curr_str)
 
+# for triplets
+triplet_iou_mean, triplet_iou_var = {}, {}
+for key in triplet_iou:
+    triplet_iou_mean[key] = np.mean(triplet_iou[key])
+    triplet_iou_var[key] = np.var(triplet_iou[key])
+sorted_triplet_iou = dict(sorted(triplet_iou_mean.items(), key=lambda item: item[1], reverse=True))
+# convert to strings
+sorted_triplet_strs = []
+for key in sorted_triplet_iou:
+    curr_str = "%s: %f, %f\n"%(key, triplet_iou_mean[key], triplet_iou_var[key])
+    sorted_triplet_strs.append(curr_str)
 # write subobj / relation with highest iou
 f = open("subobj.txt", "w+")
 f.writelines(sorted_subobj_strs)
@@ -118,7 +133,9 @@ f.close()
 f = open("rel.txt", "w+")
 f.writelines(sorted_relation_strs)
 f.close()
-'''
+f = open("trip.txt", "w+")
+f.writelines(sorted_triplet_strs)
+f.close()
 
 print("vision-based relationship analysis done.")
 
