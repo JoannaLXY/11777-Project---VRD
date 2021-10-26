@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="cmu-wh (2)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="cmu-wh" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="cmu-wh">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/xuhuah/11777-Project-VRD" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="cmu-wh (2)">
         <serverdata>
           <mappings>

@@ -31,6 +31,19 @@ use_ori_vgg = args.ori_vgg
 use_random_vgg = args.random_vgg
 print(args)
 
+# hack: change name stored in original files
+def update_keys(roidb):
+	N = len(roidb)
+	for i in range(N):
+		roidb_use = roidb[i]
+		for key, value in roidb_use.items():
+			if isinstance(value, str):
+				value = roidb_use[key]
+				new_value = value.replace('/DATA5_DB8/data/yhu/VTransE/dsr_vrd_vgg_feats/', '/home/xuhuah/11777-Project-VRD/nmp/VTransE/vrd_vgg_feats/')
+				new_value = new_value.replace('/DATA5_DB8/data/yhu/VTransE/dataset/VRD/', '/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/')
+				roidb_use[key] = new_value
+	return roidb
+
 #============= the max rela of one image ========================#
 def count_max_rela(train_roidb, test_roidb):
 	rela_total = []
@@ -72,6 +85,9 @@ def pred_write_feat_into_roidb(save_path, train_roidb, test_roidb, dataset='vrd'
 	node_total = []
 	new_roidb = {}
 	pbar = tqdm(total=len(train_roidb)+len(test_roidb))
+	# hack: change value path from provided files
+	train_roidb = update_keys(train_roidb)
+	test_roidb = update_keys(test_roidb)
 	for name, roidb in zip(['train', 'test'], [train_roidb, test_roidb]):
 		full_path = save_path + '/' + name
 		feat_name = ['pred_pool5', 'pred_fc7', 'pool5', 'fc7', 'sub_fc7', 'ob_fc7']
@@ -212,9 +228,9 @@ def process_vrd_pred_instance_data(save_path):
 	data_dir = '../data'
 	save_dir = save_path
 
-	predicates_vec = np.load(os.path.join(data_dir, 'predicates_vec.npy'))
-	objects_vec = np.load(os.path.join(data_dir, 'objects_vec.npy'))
-	roidb_read = read_roidb(os.path.join(save_dir, 'graph_roidb.npz'))
+	predicates_vec = np.load(os.path.join(data_dir, 'vrd_predicates_vec.npy'))
+	objects_vec = np.load(os.path.join(data_dir, 'vrd_objects_vec.npy'))
+	roidb_read = read_roidb(os.path.join(data_dir, 'vrd_pred_graph_roidb.npz'))
 	train_roidb = roidb_read['train']
 	test_roidb = roidb_read['test']
 	N_train = len(train_roidb)
@@ -222,6 +238,8 @@ def process_vrd_pred_instance_data(save_path):
 	pbar = tqdm(total=N_train+N_test+N_test)
 
 	def initial(N, roidb):
+		# hack: update old names from provided files
+		roidb = update_keys(roidb)
 		sub_nodes = []
 		obj_nodes = []
 		edges = []
@@ -348,7 +366,7 @@ def process_vrd_rela_instance_data(save_path):
 	return
 
 def get_path(dataset = 'vg', data_type = 'rela', use_ori_vgg=False):
-	base_path = '/DATA5_DB8/data/yhu/VTransE/'
+	base_path = '../VTransE/'
 	if dataset == 'vrd' and data_type == 'pred':
 		# ---------- vrd pred dataset ---------------#
 		if use_ori_vgg:

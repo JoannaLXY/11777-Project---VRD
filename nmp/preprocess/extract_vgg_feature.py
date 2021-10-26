@@ -1,5 +1,6 @@
 '''
 	Extract features by pretrained VGG checkpoints
+	Environment: python 2.7
 '''
 
 from __future__ import absolute_import
@@ -30,7 +31,7 @@ dataset = args.dataset
 use_ori_vgg = args.ori_vgg
 use_random_vgg = args.random_vgg
 
-feat_save_path = '/DATA5_DB8/data/yhu/VTransE'
+feat_save_path = '../VTransE'
 
 print(args)
 
@@ -118,6 +119,8 @@ with tf.Session() as sess:
 	check_path_exists(vnet.save_path)
 	for roidb_id in range(N_train):
 		roidb_use = train_roidb[roidb_id]
+		# hack: update the images path
+		roidb_use['image'] = roidb_use['image'].replace('/DATA5_DB8/data/yhu/VTransE/dataset/VRD/', '/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/')
 		if len(roidb_use['rela_gt']) == 0:
 			continue
 		if os.path.exists(os.path.join(vnet.save_path, 'ob_fc7', os.path.basename(roidb_use['image'])+'.npy')):
@@ -132,6 +135,8 @@ with tf.Session() as sess:
 	check_path_exists(vnet.save_path)
 	for roidb_id in range(N_test):
 		roidb_use = test_roidb[roidb_id]
+		# hack: update the images path
+		roidb_use['image'] = roidb_use['image'].replace('/DATA5_DB8/data/yhu/VTransE/dataset/VRD/', '/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/')
 		if len(roidb_use['rela_gt']) == 0:
 			continue
 		if os.path.exists(os.path.join(vnet.save_path, 'ob_fc7', os.path.basename(roidb_use['image'])+'.npy')):

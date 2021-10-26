@@ -23,10 +23,18 @@ def restore_from_npy(sess, restore_var):
 		sess.run(var.assign(vgg_npy[keys_1[ind]][keys_2[ind]]))
 	return
 
+# def read_roidb(roidb_path):
+# 	'''python2'''
+# 	roidb_file = np.load(roidb_path)
+# 	key = roidb_file.keys()[0]
+# 	roidb_temp = roidb_file[key]
+# 	roidb = roidb_temp[()]
+# 	return roidb
+
 def read_roidb(roidb_path):
-	'''python2'''
-	roidb_file = np.load(roidb_path)
-	key = roidb_file.keys()[0]
+	'''python3'''
+	roidb_file = np.load(roidb_path, allow_pickle=True, encoding='latin1')
+	key = list(roidb_file.keys())[0]
 	roidb_temp = roidb_file[key]
 	roidb = roidb_temp[()]
 	return roidb

@@ -8,6 +8,18 @@ import pickle
 import ipdb
 from utils import read_roidb, box_id, get_box_feats
 
+def update_keys(roidb):
+    N = len(roidb)
+    for i in range(N):
+        roidb_use = roidb[i]
+        for key, value in roidb_use.items():
+            if isinstance(value, str):
+                value = roidb_use[key]
+                new_value = value.replace('/DATA5_DB8/data/yhu/VTransE/dsr_vrd_vgg_feats/', '/home/xuhuah/11777-Project-VRD/nmp/VTransE/vrd_vgg_feats/')
+                new_value = new_value.replace('/DATA5_DB8/data/yhu/VTransE/dataset/VRD/', '/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/')
+                new_value = new_value.replace('../VTransE', './VTransE')
+                roidb_use[key] = new_value
+    return roidb
 
 class VrdPredDataset(Dataset):
     """docstring for VrdPred"""
@@ -30,6 +42,8 @@ class VrdPredDataset(Dataset):
         # ------------ original roidb feature --------#
         self.roidb_read = read_roidb('./data/vrd_pred_graph_roidb.npz')
         self.roidb = self.roidb_read[self.mode]
+        # hack: change provided name
+        self.roidb = update_keys(self.roidb)
 
         # Exclude self edges
         self.off_diag_idx = np.ravel_multi_index(

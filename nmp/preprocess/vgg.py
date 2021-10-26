@@ -196,12 +196,14 @@ class VTranse_Vgg(object):
 		sub_fc7 = []
 		ob_fc7 = []
 		for i in range(len(layers)):
-			pred_pool5.append(layers[i][0])
-			pred_fc7.append(layers[i][1])
-			pool5.append(layers[i][2])
-			fc7.append(layers[i][3])
-			sub_fc7.append(layers[i][4])
-			ob_fc7.append(layers[i][5])
+			# convert map to list
+			curr_layer = list(layers[i])
+			pred_pool5.append(curr_layer[0])
+			pred_fc7.append(curr_layer[1])
+			pool5.append(curr_layer[2])
+			fc7.append(curr_layer[3])
+			sub_fc7.append(curr_layer[4])
+			ob_fc7.append(curr_layer[5])
 		pred_pool5 = np.concatenate(pred_pool5, 0)
 		pred_fc7 = np.concatenate(pred_fc7, 0)
 		pool5 = np.concatenate(pool5, 0)

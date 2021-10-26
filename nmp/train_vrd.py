@@ -140,7 +140,7 @@ if args.save_folder:
             exp_counter += 1
             save_folder = os.path.join(args.save_folder, '{}_{}_{}_exp{}'.format(args.encoder, args.feat_mode, \
                                     args.tail, exp_counter))
-        os.mkdir(save_folder)
+        os.makedirs(save_folder, exist_ok=True)
         meta_file = os.path.join(save_folder, 'metadata.pkl')
         model_file = os.path.join(save_folder, 'temp.pt')
         best_model_file = os.path.join(save_folder, 'encoder.pt')
@@ -537,19 +537,20 @@ def eval(roidb, test_loader, is_rela=False):
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=False)
         recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
         recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=False)
-        zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=False)
-        zs_recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=True, mode='pred', topk=False)
+        # zero shot
+        # zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=False)
+        # zs_recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=True, mode='pred', topk=False)
         
         np.savez(os.path.join(load_folder, 'pred_roidb'), pred_roidb)
         print('[pred_eval] recall_50: {:.4f} recall_100: {:.4f}'.format(recall_50, recall_100), file=log)
-        print('[zs_pred_eval] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100), file=log)
+        # print('[zs_pred_eval] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100), file=log)
 
 
         np.save(os.path.join(load_folder, 'pred_probs'), pred_probs)
         np.save(os.path.join(load_folder, 'pred_cls'), pred_cls)
 
     print('recall_50: {:.4f} recall_100: {:.4f}'.format(recall_50, recall_100))
-    print('[zs] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100))
+    # print('[zs] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100))
     return
 
 def eval_topk(roidb, test_loader, is_rela=False, k=70):
@@ -657,18 +658,19 @@ def eval_topk(roidb, test_loader, is_rela=False, k=70):
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=True)
         recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=True)
         recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=True)
-        zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=True)
-        zs_recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=True, mode='pred', topk=True)
+        # zero shot
+        # zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=True)
+        # zs_recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=True, mode='pred', topk=True)
         
         np.savez(os.path.join(load_folder, 'topk_pred_roidb'), pred_roidb)
         print('[pred_eval_topk] recall_50: {:.4f} recall_100: {:.4f}'.format(recall_50, recall_100), file=log)
-        print('[zs_pred_eval_topk] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100), file=log)
+        # print('[zs_pred_eval_topk] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100), file=log)
 
         np.save(os.path.join(load_folder, 'pred_probs'), pred_probs)
         np.save(os.path.join(load_folder, 'pred_cls'), pred_cls)
 
     print('recall_50: {:.4f} recall_100: {:.4f}'.format(recall_50, recall_100))
-    print('[zs] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100))
+    # print('[zs] recall_50: {:.4f} recall_100: {:.4f}'.format(zs_recall_50, zs_recall_100))
     return
 
 # Train model
