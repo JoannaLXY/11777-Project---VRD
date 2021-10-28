@@ -15,3 +15,5 @@
 #### Train
 1. Model from MFURLN-CVPR-2019-relationship-detection-method/train/vrd_rela.py is stored in '/data/xyao/sg_dataset/MFURLN/output/vrd_roid_rela.ckpt'
 2. Model from MFURLN-CVPR-2019-relationship-detection-method/train/vrd_predicate is stored in '/data/xyao/sg_dataset/MFURLN/output/pred/'
+
+#### Infernece -TBD
