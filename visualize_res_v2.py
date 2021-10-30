@@ -75,8 +75,8 @@ def generate_gts_v2(gt_annos):
         for rel in attr:
             subj_cat = int(rel['subject']['category'])
             obj_cat = int(rel['object']['category'])
-            subj_bbox = str(rel['subject']['bbox'][0]) + '_' + str(rel['subject']['bbox'][2]) + '_' + str(rel['subject']['bbox'][1]) + '_' + str(rel['subject']['bbox'][3])
-            obj_bbox = str(rel['object']['bbox'][0]) + '_' + str(rel['object']['bbox'][2]) + '_' + str(rel['object']['bbox'][1]) + '_' + str(rel['object']['bbox'][3])
+            subj_bbox = str(rel['subject']['bbox'][0]) + '_' + str(rel['subject']['bbox'][1]) + '_' + str(rel['subject']['bbox'][2]) + '_' + str(rel['subject']['bbox'][3])
+            obj_bbox = str(rel['object']['bbox'][0]) + '_' + str(rel['object']['bbox'][1]) + '_' + str(rel['object']['bbox'][2]) + '_' + str(rel['object']['bbox'][3])
             subj_name = objects[subj_cat]
             obj_name = objects[obj_cat]
             pair_name = subj_name + '_' + subj_bbox + '_' + obj_name + '_' + obj_bbox
