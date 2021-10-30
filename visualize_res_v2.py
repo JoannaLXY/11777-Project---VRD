@@ -136,13 +136,15 @@ gts = generate_gts_v2(gt_annos)
 # load predictions
 preds = pickle.load(open(path_to_result, "rb"))
 # should have 1000 test results
-assert len(preds.keys()) == 1000
+# assert len(preds.keys()) == 1000
 
 # iterate over GT annos
 for img_name, anno in tqdm(gt_annos.items()):
+    if img_name not in preds:
+        continue
     os.makedirs(join(output_dirs,img_name), exist_ok=True)
-    relations = anno["relationships"]
-    objects = anno["objects"]
+    #relations = anno["relationships"]
+    #objects = anno["objects"]
     # get prediction result and gt
     pred = preds[img_name]
     gt = gts[img_name]
