@@ -102,7 +102,7 @@ def draw_box_preds_in_image(img_path, gt_list, pred_list, pair_name):
     right_table = np.zeros((rgb_img.shape[0], 200, 3),dtype=np.uint8)
     left_table.fill(255)
     right_table.fill(255)
-    y0, dy = 10, 15
+    y0, dy = 50, 15
     for i, predicate in enumerate(gt_list):
         text = predicate[0] + ": " + str(predicate[1])
         y = y0 + i * dy
