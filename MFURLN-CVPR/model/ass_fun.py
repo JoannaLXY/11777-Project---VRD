@@ -488,7 +488,7 @@ def rela_recall_r(test_roidb, pred_roidb, N_recall):
 
         N_pred = len(pred_rela)
         sort_score = -np.sort(-np.reshape(pred_rela_score, [1, -1]))
-
+        # threshold based on num of recall
         if N_recall >= N_pred:
             thresh = -1
         else:
@@ -496,13 +496,13 @@ def rela_recall_r(test_roidb, pred_roidb, N_recall):
 
         detected_gt = np.zeros([N_rela, ])
         detected_gt_1 = np.zeros([N_rela, ])
-        for j in range(N_pred):
+        for j in range(N_pred): # preidct
             if pred_rela_score[j] <= thresh:
                 continue
             maxk = 0
             positionk = -1
-            for k in range(N_rela):
-                if detected_gt[k] == 1:
+            for k in range(N_rela): # gt
+                if detected_gt[k] == 1: # aleady predicted skip
                     continue
                 if (sub_gt[k] == sub_dete[j]) and (obj_gt[k] == obj_dete[j]) and (rela_gt[k] == pred_rela[j]):
                     s_iou = compute_iou_each(sub_box_dete[j], sub_box_gt[k])
@@ -511,6 +511,7 @@ def rela_recall_r(test_roidb, pred_roidb, N_recall):
                     if (s_iou >= 0.5) and (o_iou >= 0.5) and iou > maxk:
                         maxk = iou
                         positionk = k
+            # fire up of largest overlap -- each prediction at most one
             if positionk > -1:
                 detected_gt[positionk] = 1
         N_right = N_right + np.sum(detected_gt)

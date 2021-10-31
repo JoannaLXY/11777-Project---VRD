@@ -1,6 +1,11 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+import os,sys
+import os.path
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 import tensorflow as tf 
 import numpy as np 
 from model.config import cfg 
@@ -17,10 +22,10 @@ index_cls = False
 vnet = MFURLN()
 vnet.create_graph(N_each_batch, index_sp, index_cls, N_cls, N_rela)
 
-roidb_path = './input/vrd_rela.npz'
-res_path =  './tf-faster-rcnn-master/lib/output/VRD/vgg16_faster_rcnn_iter_60000.ckpt'
-model_path = './result/vrd/rela/vrd_roid_rela.ckpt'
-save_path = './result/vrd/rela/vrd_roid_rela.npz'
+roidb_path = '/data/xyao/sg_dataset/MFURLN/process/vrd_rela_process_roidb.npz'
+res_path =  '/data/xyao/sg_dataset/MFURLN/faster_rcnn/pretrain/vrd_vgg_pretrained.ckpt'
+model_path = '/data/xyao/sg_dataset/MFURLN/output/vrd_roid_rela.ckpt'
+save_path = '/data/xyao/sg_dataset/MFURLN/output/vrd_roid_rela.ckpt'
 
 
 saver = tf.train.Saver(max_to_keep = 200)
@@ -62,19 +67,19 @@ with tf.Session() as sess:
 							'sub_box_dete': roidb_use['sub_box_dete'], 'obj_box_dete': roidb_use['obj_box_dete'],
 							'sub_dete': roidb_use['sub_dete']-1, 'obj_dete': roidb_use['obj_dete']-1}
 		pred_roidb.append(pred_roidb_temp)
-   		rela_R50, rela_num_right50 = rela_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 50)
-   		rela_R100, rela_num_right100 = rela_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 100)
-   		phrase_R50, rela_num_right50 = phrase_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 50)
-   		phrase_R100, rela_num_right100 = phrase_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 100)
-   		rR50 = rR50 + rela_R50
-   		rR100 = rR100 + rela_R100
-   		pR50 = pR50 + phrase_R50
-   		pR100 = pR100 + phrase_R100
+		rela_R50, rela_num_right50 = rela_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 50)
+		rela_R100, rela_num_right100 = rela_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 100)
+		phrase_R50, rela_num_right50 = phrase_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 50)
+		phrase_R100, rela_num_right100 = phrase_recall_r([test_roidb[roidb_id]], [pred_roidb_temp], 100)
+		rR50 = rR50 + rela_R50
+		rR100 = rR100 + rela_R100
+		pR50 = pR50 + phrase_R50
+		pR100 = pR100 + phrase_R100
 		num = num+rela_num_right50
 
-   		if roidb_id%50 == 0:
-       			print(roidb_id, rR50,rR100, pR50,pR100, num)
-       			print('rela_R50: {0}, rela_R100: {1}'.format(rR50/num, rR100/num))
+		if roidb_id%50 == 0:
+			print(roidb_id, rR50,rR100, pR50,pR100, num)
+			print('rela_R50: {0}, rela_R100: {1}'.format(rR50/num, rR100/num))
 			print('phrase_R50: {0}, phrase_R100: {1}'.format(pR50/num, pR100/num))
 		del pred_roidb_temp 
 		gc.collect()	
