@@ -14,6 +14,7 @@ from modules import *
 from eval_metrics import *
 from utils import *
 from DataLoader import *
+from vis_graph import vis_graph
 
 import ipdb
 from tqdm import tqdm
@@ -535,6 +536,8 @@ def eval(roidb, test_loader, is_rela=False):
 
     else:
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=False)
+        # vis_img = vis_graph(roidb, pred_roidb)
+        # recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
         recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
         recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=False)
         # zero shot

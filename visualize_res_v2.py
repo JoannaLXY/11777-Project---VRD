@@ -13,6 +13,10 @@ from tqdm import tqdm
 import numpy as np
 from collections import defaultdict
 
+predicates = ["on", "wear", "has", "next to", "sleep next to", "sit next to", "stand next to", "park next", "walk next to", "above", "behind", "stand behind", "sit behind", "park behind", "in the front of", "under", "stand under", "sit under", "near", "walk to", "walk", "walk past", "in", "below", "beside", "walk beside", "over", "hold", "by", "beneath", "with", "on the top of", "on the left of", "on the right of", "sit on", "ride", "carry", "look", "stand on", "use", "at", "attach to", "cover", "touch", "watch", "against", "inside", "adjacent to", "across", "contain", "drive", "drive on", "taller than", "eat", "park on", "lying on", "pull", "talk", "lean on", "fly", "face", "play with", "sleep on", "outside of", "rest on", "follow", "hit", "feed", "kick", "skate on"]
+objects = ["person", "sky", "building", "truck", "bus", "table", "shirt", "chair", "car", "train", "glasses", "tree", "boat", "hat", "trees", "grass", "pants", "road", "motorcycle", "jacket", "monitor", "wheel", "umbrella", "plate", "bike", "clock", "bag", "shoe", "laptop", "desk", "cabinet", "counter", "bench", "shoes", "tower", "bottle", "helmet", "stove", "lamp", "coat", "bed", "dog", "mountain", "horse", "plane", "roof", "skateboard", "traffic light", "bush", "phone", "airplane", "sofa", "cup", "sink", "shelf", "box", "van", "hand", "shorts", "post", "jeans", "cat", "sunglasses", "bowl", "computer", "pillow", "pizza", "basket", "elephant", "kite", "sand", "keyboard", "plant", "can", "vase", "refrigerator", "cart", "skis", "pot", "surfboard", "paper", "mouse", "trash can", "cone", "camera", "ball", "bear", "giraffe", "tie", "luggage", "faucet", "hydrant", "snowboard", "oven", "engine", "watch", "face", "street", "ramp", "suitcase"]
+
+
 """parse annotations to build a map with key = img_name"""
 def parse_annos(annos):
     new_annos = {}
@@ -63,6 +67,26 @@ def generate_gts(gt_annos):
         outputs[img_name] = pairs
     return outputs
 
+"""generate similar format as predictions file for GT (for 'json dataset' version) """
+def generate_gts_v2(gt_annos):
+    result = {}
+    for img, attr in gt_annos.items():
+        file = {}
+        for rel in attr:
+            subj_cat = int(rel['subject']['category'])
+            obj_cat = int(rel['object']['category'])
+            subj_bbox = str(rel['subject']['bbox'][0]) + '_' + str(rel['subject']['bbox'][1]) + '_' + str(rel['subject']['bbox'][2]) + '_' + str(rel['subject']['bbox'][3])
+            obj_bbox = str(rel['object']['bbox'][0]) + '_' + str(rel['object']['bbox'][1]) + '_' + str(rel['object']['bbox'][2]) + '_' + str(rel['object']['bbox'][3])
+            subj_name = objects[subj_cat]
+            obj_name = objects[obj_cat]
+            pair_name = subj_name + '_' + subj_bbox + '_' + obj_name + '_' + obj_bbox
+            pre = predicates[rel['predicate']]
+            file[pair_name] = file.get(pair_name, []) + [(pre, 1.0)]
+
+        result[img] = file
+
+    return result
+
 """draw bounding box and predicates from GT and preditions"""
 def draw_box_preds_in_image(img_path, gt_list, pred_list, pair_name):
     rgb_img = cv2.imread(img_path)
@@ -78,7 +102,7 @@ def draw_box_preds_in_image(img_path, gt_list, pred_list, pair_name):
     right_table = np.zeros((rgb_img.shape[0], 200, 3),dtype=np.uint8)
     left_table.fill(255)
     right_table.fill(255)
-    y0, dy = 10, 15
+    y0, dy = 30, 15
     for i, predicate in enumerate(gt_list):
         text = predicate[0] + ": " + str(predicate[1])
         y = y0 + i * dy
@@ -92,31 +116,36 @@ def draw_box_preds_in_image(img_path, gt_list, pred_list, pair_name):
 
 ###START OF THE MAIN PROGARM###
 path_to_dataset = "/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/sg_dataset"
+path_to_json_dataset = "/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/json_dataset"
 path_to_result = "/home/xuhuah/11777-Project-VRD/nmp_res_50.pkl"
 output_dirs = "/home/xuhuah/vrd_vis"
 
 # load ground truth
 img_dir = join(path_to_dataset, "sg_test_images")
 gt_imgs = glob.glob(join(img_dir, "*"))
-gt_annos = json.load(open(join(path_to_dataset, "sg_test_annotations.json")))
-gt_annos = parse_annos(gt_annos)
-# should have 1000 test images
-assert len(gt_imgs) == 1000
-assert len(gt_annos) == 1000
-gts = generate_gts(gt_annos)
+gt_annos = json.load(open(join(path_to_json_dataset, "annotations_test.json"), 'r'))
+# gt_annos = parse_annos(gt_annos)
+# # should have 1000 test images
+# assert len(gt_imgs) == 1000
+# assert len(gt_annos) == 1000
+gts = generate_gts_v2(gt_annos)
+
+
 
 # generate similar format as prediction for GT
 
 # load predictions
 preds = pickle.load(open(path_to_result, "rb"))
 # should have 1000 test results
-assert len(preds.keys()) == 1000
+# assert len(preds.keys()) == 1000
 
 # iterate over GT annos
 for img_name, anno in tqdm(gt_annos.items()):
+    if img_name not in preds:
+        continue
     os.makedirs(join(output_dirs,img_name), exist_ok=True)
-    relations = anno["relationships"]
-    objects = anno["objects"]
+    #relations = anno["relationships"]
+    #objects = anno["objects"]
     # get prediction result and gt
     pred = preds[img_name]
     gt = gts[img_name]
