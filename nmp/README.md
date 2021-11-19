@@ -6,7 +6,7 @@
 - Python 3.6
 
 ## ~~Data Preprocessing~~ 
-<span style="color:red">[YOU DON'T NEED TO DO THIS SECTION BECAUSE HANDSOME XUHUA HAS DONE THIS FOR YOU!!]</span>
+<span style="color:red">[YOU DON'T NEED TO DO THIS SECTION BECAUSE **HANDSOME XUHUA** HAS DONE THIS FOR YOU!!]</span>
 
 ### 1. Extract and save visual appearance
 Here we use vrd dataset and predicate detection as example.
