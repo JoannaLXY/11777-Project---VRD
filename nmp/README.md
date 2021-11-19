@@ -33,16 +33,13 @@ Please download following 3 folders from this [link](https://drive.google.com/dr
 └── dataset
     ├── vrd
       ├── sg_dataset
-      ├── sg_test_images
-      ├── sg_train_images
+          ├── sg_test_images
+          ├── sg_train_images
+          └── *.json
 └── data
     └── pretrained
-    ├── vrd/vg_objects_vec.npy
-    ├── vrd/vg_roidb.npz
-    ├── vrd/vg_rela_roidb.npz
-    ├── vrd/vg_pred_graph_roidb.np
-    ├── vrd/vg_rela_graph_roidb.np
-    └── vrd/vg_so_prior.npy
+    ├── *.npy
+    └── *.npz
 └── checkpoints
 ├── DataLoader.py
 ├── eval_metrics.py
@@ -65,4 +62,11 @@ CUDA_VISIBLE_DEVICES=0 python train_vrd.py --encoder=nmp --use-loc --mode=whole 
 CUDA_VISIBLE_DEVICES=0 python train_vrd.py --encoder=nmp --use-loc --mode=eval --feat-mode=full --restore --load-folder=exp0
 ```
 
-After training for 50 epochs, you should expect to see results reported in our midterm report.
+After training for 50 epochs, you should expect to see results reported in our midterm report:
+```
+------------- pred --------------
+recall_50: 0.5698 recall_100: 0.5698
+------------- pred topk--------------
+recall_50: 0.9013 recall_100: 0.9628
+
+```
