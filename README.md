@@ -1,3 +1,18 @@
+#### Use depth prediction from AdaBins
+Refer to getBboxDepth.py
+```
+    src_image = Image.open(f)
+    sub_box = [1,1,100,100]
+    obj_box = [1,1,100,100]
+
+    fname = f.split('/')[-1]
+    depth_im_name = os.path.join(depth_dir, fname[:-4]+'.png')
+    depth_img = readDepth(depth_im_name, src_image.size)
+    sub_depth, obj_depth = cropBboxDepth(depth_img, sub_box, obj_box)
+```
+Read the source image, ending with .jpg. Find the depth image, ending with .png. Get h x w depth inference in int32 dtype. Crop subject and object pathes according to bbox in [x_min, y_min, x_max, y_max]. 
+
+
 #### Faster-rcnn trained weight
 1. Use venv instead of conda
 2. Follow https://github.com/endernewton/tf-faster-rcnn to download vgg-16 pretrained weights, make cuda librares
