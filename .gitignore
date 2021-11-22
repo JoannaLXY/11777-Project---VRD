@@ -1,4 +1,4 @@
 .idea/
-./nmp/data
-./nmp/dataset
-./nmp/VTransE
+./nmp/data/*
+./nmp/dataset/*
+./nmp/VTransE/*
