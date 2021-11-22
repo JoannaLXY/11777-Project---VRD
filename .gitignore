@@ -1,4 +1,6 @@
 .idea/
+nmp/data/**
 *.npy
 *.jpg
 *.npz
+*.pkl
