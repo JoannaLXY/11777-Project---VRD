@@ -1,5 +1,6 @@
 .idea/
 nmp/data/**
+nmp/dataset/**
 *.npy
 *.jpg
 *.npz
