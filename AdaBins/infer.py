@@ -139,6 +139,7 @@ class InferenceHelper:
             pil_image = pil_image.resize((640, 480))
             image = np.asarray(pil_image, dtype='float32') / 255.
             # image = np.asarray(Image.open(f), dtype='float32') / 255.
+            print(f, image.shape)
             image = transform(image).unsqueeze(0).to(self.device)
 
             centers, final = self.predict(image)

@@ -3,6 +3,7 @@ import os
 import sys
 import glob
 
+import cv2
 import numpy as np
 import torch
 import torch.nn as nn
@@ -19,8 +20,9 @@ def readDepth(image_dir, src_image_shape):
     raw inference images are garscale single channle image
     return h x w in int32 as depth prediction
     '''
-    pil_image = Image.open(image_dir)
-    pil_image  = pil_image.resize(src_image_shape)
+    pil_image = cv2.imread(image_dir, cv2.IMREAD_UNCHANGED)
+    src_size = (src_image_shape[1], src_image_shape[0])
+    pil_image  = cv2.resize(pil_image, src_size)
     img = np.array(pil_image, np.int32, copy=False)
     return img
 
@@ -40,15 +42,15 @@ src_dir = "/data/xyao/sg_dataset/sg_train_images/"
 
 all_files = glob.glob(os.path.join(src_dir, "*"))
 for index, f in tqdm(enumerate(all_files)):
-    if index > 3:
+    if index > 1:
         break
-    src_image = Image.open(f)
+    src_image = cv2.imread(f)
     sub_box = [1,1,100,100]
     obj_box = [1,1,100,100]
 
     fname = f.split('/')[-1]
     depth_im_name = os.path.join(depth_dir, fname[:-4]+'.png')
-    depth_img = readDepth(depth_im_name, src_image.size)
+    depth_img = readDepth(depth_im_name, src_image.shape)
     sub_depth, obj_depth = cropBboxDepth(depth_img, sub_box, obj_box)
 
     plt.figure()
@@ -60,4 +62,4 @@ for index, f in tqdm(enumerate(all_files)):
     axarr[1].imshow(obj_depth)
     axarr[2].imshow(depth_img)
     axarr[3].imshow(src_image)
-    
+    plt.savefig('./d.png')
