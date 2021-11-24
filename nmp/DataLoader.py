@@ -15,8 +15,8 @@ def update_keys(roidb):
         for key, value in roidb_use.items():
             if isinstance(value, str):
                 value = roidb_use[key]
-                new_value = value.replace('/DATA5_DB8/data/yhu/VTransE/dsr_vrd_vgg_feats/', '/home/xuhuah/11777-Project-VRD/nmp/VTransE/vrd_vgg_feats/')
-                new_value = new_value.replace('/DATA5_DB8/data/yhu/VTransE/dataset/VRD/', '/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/')
+                new_value = value.replace('/DATA5_DB8/data/yhu/VTransE/dsr_vrd_vgg_feats/', '/home/lixuanyi199801/11777-Project-VRD/nmp/VTransE/vrd_vgg_feats/')
+                new_value = new_value.replace('/DATA5_DB8/data/yhu/VTransE/dataset/VRD/', '/home/lixuanyi199801/11777-Project-VRD/nmp/dataset/vrd/')
                 new_value = new_value.replace('../VTransE', './VTransE')
                 roidb_use[key] = new_value
     return roidb

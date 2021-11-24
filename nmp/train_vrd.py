@@ -172,7 +172,7 @@ else:
 # ===================== Model Definition ========================#
 
 if args.encoder == 'nmp':
-    model = NMPEncoder(args.hidden,
+    model = UpdatedNMPEncoder(args.hidden,
                        edge_types=args.edge_types, node_types=args.node_types, n_iter=args.n_iter,
                        do_prob=args.dropout, use_vis=use_vis, use_spatial=use_spatial, use_sem=use_sem, use_loc=args.use_loc, use_cls=args.use_cls)
 elif args.encoder == 'simple':
