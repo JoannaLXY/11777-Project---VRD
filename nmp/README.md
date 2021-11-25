@@ -58,6 +58,7 @@ This function ```update_keys()``` is used to hack the roidb.
 ```
 # train 
 CUDA_VISIBLE_DEVICES=0 python train_vrd.py --encoder=nmp --use-loc --mode=whole --feat-mode=full
+CUDA_VISIBLE_DEVICES=0 python train_vrd.py --encoder=nmp_attn --use-loc --mode=whole --feat-mode=full --save-folder ./checkpoints/vrd_attn # run with attention
 # eval
 CUDA_VISIBLE_DEVICES=0 python train_vrd.py --encoder=nmp --use-loc --mode=eval --feat-mode=full --restore --load-folder=exp0
 ```
