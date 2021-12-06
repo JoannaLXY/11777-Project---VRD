@@ -117,8 +117,12 @@ def draw_box_preds_in_image(img_path, gt_list, pred_list, pair_name):
 ###START OF THE MAIN PROGARM###
 path_to_dataset = "/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/sg_dataset"
 path_to_json_dataset = "/home/xuhuah/11777-Project-VRD/nmp/dataset/vrd/json_dataset"
-path_to_result = "/home/xuhuah/11777-Project-VRD/nmp_res_50.pkl"
-output_dirs = "/home/xuhuah/vrd_vis"
+# for RECALL 50 + TOP 1
+# path_to_result = "/home/xuhuah/11777-Project-VRD/nmp_res_rec50_top1.pkl"
+# output_dirs = "/home/xuhuah/vrd_vis_rec50_top1"
+# for RECALL 50 + TOP 70
+path_to_result = "/home/xuhuah/11777-Project-VRD/nmp_res_rec50_top70.pkl"
+output_dirs = "/home/xuhuah/vrd_vis_rec50_top70"
 
 # load ground truth
 img_dir = join(path_to_dataset, "sg_test_images")

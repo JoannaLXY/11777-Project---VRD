@@ -71,3 +71,17 @@ recall_50: 0.5698 recall_100: 0.5698
 recall_50: 0.9013 recall_100: 0.9628
 
 ```
+
+## Visualization
+To generate visualization for analysis:
+
+(1) Run the eval script:
+```
+CUDA_VISIBLE_DEVICES=0 python train_vrd.py --encoder=nmp --use-loc --mode=eval --feat-mode=full --restore --load-folder=exp0
+```
+(2) Run the visualization script
+```
+python ../visualiza_res_v2.py
+```
+
+Remember to change my paths "/home/xuhuah/..." to yours in ```eval_metrics.py``` and ```visualiza_res_v2.py``` accordingly
