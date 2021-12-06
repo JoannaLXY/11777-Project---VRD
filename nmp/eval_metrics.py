@@ -215,7 +215,7 @@ def eval_result(test_roidb, pred_roidb, N_recall, is_zs=False, mode='pred', topk
 		# det_score = np.sum(np.log(det_lbls[:, 0:3]), axis=1)
 		det_score = det_lbls[:,1]
 		inds = np.argsort(det_score)[::-1][:n_re]  # at most n_re predictions for each image
-		for pair_id, (det_box, det_label, det_s) in enumerate(zip(det_bxs[inds, :], det_lbls[inds, 3:], det_score[inds])):
+		for det_box, det_label, det_s in zip(det_bxs[inds, :], det_lbls[inds, 3:], det_score[inds]):
 			# find matched pair
 			paired_gt_id = find_paired_gt_id(det_box, gt_bxs, det_label, gt_lbls)
 			sub, pred, obj = objects[int(gt_lbls[paired_gt_id, 0])], predicates[int(gt_lbls[paired_gt_id, 1])], \
