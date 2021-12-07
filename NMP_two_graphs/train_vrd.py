@@ -538,7 +538,7 @@ def eval(roidb, test_loader, is_rela=False):
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=False)
         # vis_img = vis_graph(roidb, pred_roidb)
         # recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
-        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
+        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False, vis=True)
         recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=False)
         # zero shot
         # zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=False)
@@ -659,7 +659,7 @@ def eval_topk(roidb, test_loader, is_rela=False, k=70):
         # np.save(os.path.join(load_folder, 'rela_pred_cls'), pred_cls)
     else:
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=True)
-        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=True)
+        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=True, vis=True)
         recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=True)
         # zero shot
         # zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=True)

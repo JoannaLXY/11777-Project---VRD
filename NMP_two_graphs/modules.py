@@ -5,7 +5,7 @@ import math
 import ipdb
 import torch.utils.model_zoo as model_zoo
 from torch.autograd import Variable
-
+from block import fusions
 class FC(nn.Module):
     def __init__(self, in_features, out_features, relu=True):
         super(FC, self).__init__()
@@ -162,7 +162,7 @@ class SimpleEncoder(nn.Module):
         output = self.fc_rel(self.edge_feats_final)
         return output, x_cls
         
-
+'''
 class NMPEncoder(nn.Module):
     def __init__(self, n_hid, edge_types=71, node_types=101, n_iter=2, do_prob=0., use_vis=True, use_spatial=False, use_sem=True, use_loc=False, use_cls=False):
         super(NMPEncoder, self).__init__()
@@ -359,6 +359,7 @@ class NMPEncoder(nn.Module):
 
         if self.mode == 'gating':
             self.edge_feats = self.sigmoid(torch.matmul(self.lin_edge_feats, self.lin_gate) + torch.matmul(self.vis_edge_feats, self.vis_gate) + self.gate_bias) #nhid
+            #self.edge_feats = self.sigmoid(torch.matmul(self.lin_edge_feats, self.lin_gate)) + self.sigmoid(torch.matmul(self.vis_edge_feats, self.vis_gate)) + self.gate_bias #nhid
         elif self.mode == 'concat':
             self.edge_feats = torch.cat([self.lin_edge_feats, self.vis_edge_feats], -1) # 2*nhid
         if self.use_loc:
@@ -369,3 +370,613 @@ class NMPEncoder(nn.Module):
         output = self.fc_rel(self.edge_feats)
 
         return output, x_cls
+'''
+
+
+class NMPEncoder(nn.Module): # original
+    def __init__(self, n_hid, edge_types=71, node_types=101, n_iter=2, do_prob=0., use_vis=True, use_spatial=False, use_sem=True, use_loc=False, use_cls=False):
+        super(NMPEncoder, self).__init__()
+        self.use_vis = use_vis
+        self.use_spatial = use_spatial
+        self.use_sem = use_sem
+        self.use_loc = use_loc
+        self.use_cls = use_cls
+
+        self.n_iter = n_iter
+
+        self.vis_hid = 128
+        self.sem_hid = n_hid
+        self.spatial_hid = n_hid
+        self.loc_hid = 64
+        self.cls_hid = 64
+
+        self.mlp1 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.mlp2 = MLP(n_hid, n_hid, n_hid, do_prob)
+        self.mlp3 = MLP(n_hid * 3, n_hid, n_hid, do_prob)
+        self.mlp4 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.mlp5 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+
+        self.mlp_e2n = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+
+        # ------- visual feature ---------#
+        # self.fc_vis = FC(4096, n_hid)
+        self.fc_vis = MLP(4096, self.vis_hid, self.vis_hid, do_prob)
+        # ------ spatial feature ---------#
+        # self.fc_spatial = FC(512, n_hid)
+        self.fc_spatial = MLP(512, self.spatial_hid, self.spatial_hid, do_prob)
+        # ------- semantic feature -------#
+        # self.fc_sem = FC(300, n_hid)
+        self.fc_sem = MLP(300, self.sem_hid, self.sem_hid, do_prob)
+        # ------- location feature -------#
+        self.fc_loc = MLP(20, self.loc_hid, self.loc_hid, do_prob)
+
+        n_fusion = 0
+        if self.use_vis:
+            n_fusion += self.vis_hid
+            if self.use_cls:
+                n_fusion += self.cls_hid
+        if self.use_sem:
+            n_fusion += self.sem_hid
+
+        final_fusion = n_hid
+        if self.use_loc:
+            final_fusion += self.loc_hid
+
+        # # ---- sub obj concat ---------#
+        # self.fc_so_vis = FC(n_hid*2, n_hid)
+
+        # # ---- sub obj concat ---------#
+        # self.fc_so_sem = FC(n_hid*2, n_hid)
+
+        # ---- all the feature into hidden space -------#
+        self.fc_fusion = FC(n_fusion, n_hid)
+
+        self.fc_rel = FC(final_fusion, edge_types, relu=False)
+
+        if self.use_vis:
+            self.fc_cls = FC(4096, node_types, relu=False)
+        else:
+            self.fc_cls = FC(300, node_types, relu=False)
+        self.fc_cls_feat = FC(node_types, self.cls_hid)
+
+        self.dropout_prob = do_prob
+        self.init_weights()
+
+    def init_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight.data)
+                m.bias.data.fill_(0.1)
+
+    def node2edge(self, x, rel_rec, rel_send):
+        receivers = torch.matmul(rel_rec, x)
+        senders = torch.matmul(rel_send, x)
+        edges = torch.cat([receivers, senders], dim=2)
+        return edges
+
+    def edge2node(self, x, rel_rec, rel_send):
+        new_rec_rec = rel_rec.permute(0,2,1)
+        weight_rec = torch.sum(new_rec_rec, -1).float()
+        weight_rec = weight_rec + (weight_rec==0).float()
+        weight_rec = torch.unsqueeze(weight_rec, -1).expand(weight_rec.size(0), weight_rec.size(1), x.size(-1))
+        incoming = torch.matmul(new_rec_rec, x)
+        incoming = incoming / weight_rec
+
+        new_rec_send = rel_send.permute(0,2,1)
+        weight_send = torch.sum(new_rec_send, -1).float()
+        weight_send = weight_send + (weight_send==0).float()
+        weight_send = torch.unsqueeze(weight_send, -1).expand(weight_send.size(0), weight_send.size(1), x.size(-1))
+        outgoing = torch.matmul(new_rec_send, x)
+        outgoing = outgoing / weight_send
+
+        nodes = torch.cat([incoming, outgoing], -1)
+        # nodes = (incoming + outgoing) * 0.5
+        # nodes = incoming + outgoing
+        # nodes = outgoing
+        # nodes = incoming
+        return nodes
+
+    def forward(self, inputs, spatial_feats, rel_rec, rel_send, bbox_loc):
+        x = inputs.view(inputs.size(0), inputs.size(1), -1)
+        batch_size = inputs.size(0)
+        n_atoms = inputs.size(1)
+        n_edges = rel_rec.size(1)
+
+        if self.use_vis:
+            x_v = self.fc_vis(x[:, :, :4096])   #[batch_size, num_nodes, n_hid]
+            node_feats = x_v
+            if self.use_sem:
+                x_s = self.fc_sem(x[:, :, 4096:])   #[batch_size, num_nodes, n_hid]
+                node_feats = torch.cat([node_feats, x_s], -1)
+            x_cls = self.fc_cls(x[:, :, :4096])
+            if self.use_cls:
+                e_cls = self.fc_cls_feat(x_cls)
+                node_feats = torch.cat([node_feats, e_cls], -1)
+        else:
+            x_s = self.fc_sem(x)
+            node_feats = x_s
+            x_cls = self.fc_cls(x)
+
+        node_feats = self.fc_fusion(node_feats)
+
+        if self.use_spatial:
+            x_l = self.fc_spatial(spatial_feats)
+            edge_feats = x_l
+        else:
+            edge_feats = self.mlp1(self.node2edge(node_feats, rel_rec, rel_send))
+
+        x = edge_feats
+        x = self.mlp_e2n(self.edge2node(x, rel_rec, rel_send))
+        x = self.mlp2(x)
+        self.node_feats = x
+        x = self.node2edge(x, rel_rec, rel_send)
+
+        # # n2e
+        # x = self.mlp4(x)
+        # x = self.edge2node(x, rel_rec, rel_send)
+        # x = self.mlp5(x)
+        # x = self.node2edge(x, rel_rec, rel_send)
+
+        # [e_{ij}^1; e_{ij}^2]
+        x = torch.cat((x, edge_feats), dim=2)  # Skip connection
+        self.edge_feats = self.mlp3(x)
+
+        # e_{ij}^2
+        # self.edge_feats = self.mlp4(x)
+
+        if self.use_loc:
+            e_loc = self.fc_loc(bbox_loc)
+            self.edge_feats = torch.cat([self.edge_feats, e_loc], -1)
+        output = self.fc_rel(self.edge_feats)
+
+        return output, x_cls
+
+'''
+class NMPEncoder(nn.Module): # work
+    def __init__(self, n_hid, edge_types=71, node_types=101, n_iter=2, do_prob=0., use_vis=True, use_spatial=False, use_sem=True, use_loc=False, use_cls=False):
+        super(NMPEncoder, self).__init__()
+        self.use_vis = use_vis
+        self.use_spatial = use_spatial
+        self.use_sem = use_sem
+        self.use_loc = use_loc
+        self.use_cls = use_cls
+
+        self.mode = 'gating'
+        self.n_iter = n_iter
+
+        self.vis_hid = n_hid # why 128? why not n_hid
+        self.sem_hid = n_hid # default 512
+        self.spatial_hid = n_hid
+        self.loc_hid = 64
+        self.cls_hid = 64
+
+        self.lin_mlp1 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.lin_mlp2 = MLP(n_hid, n_hid, n_hid, do_prob)
+        self.lin_mlp3 = MLP(n_hid * 3, n_hid, n_hid, do_prob)
+
+        self.vis_mlp1 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.vis_mlp2 = MLP(n_hid, n_hid, n_hid, do_prob)
+        self.vis_mlp3 = MLP(n_hid * 3, n_hid, n_hid, do_prob)
+
+        self.mlp4 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.mlp5 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+
+        self.lin_mlp_e2n = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.vis_mlp_e2n = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+
+        # gate
+        lin_gate = torch.randn((n_hid, n_hid), requires_grad = True)
+        vis_gate = torch.randn((n_hid, n_hid), requires_grad = True)
+        gate_bias = torch.randn(n_hid, requires_grad = True)
+        self.lin_gate = torch.nn.Parameter(lin_gate)
+        self.vis_gate = torch.nn.Parameter(vis_gate)
+        self.gate_bias = torch.nn.Parameter(gate_bias)
+        self.sigmoid = torch.nn.Sigmoid()
+
+        # intermediate fusion
+        self.intermediate = True
+        self.exchange = MLP(n_hid * 2, n_hid * 2, n_hid * 2, do_prob)
+        #self.block_exchange = fusions.Block([n_hid, n_hid], n_hid*2)
+        # self.W_ll = MLP(n_hid, n_hid, n_hid, do_prob)
+        # self.W_lv = MLP(n_hid, n_hid, n_hid, do_prob)
+        # self.W_vl = MLP(n_hid, n_hid, n_hid, do_prob)
+        # self.W_vv = MLP(n_hid, n_hid, n_hid, do_prob)
+
+        # ------- visual feature ---------#
+        # self.fc_vis = FC(4096, n_hid)
+        self.fc_vis = MLP(4096, self.vis_hid, self.vis_hid, do_prob)
+        # ------ spatial feature ---------#
+        # self.fc_spatial = FC(512, n_hid)
+        self.fc_spatial = MLP(512, self.spatial_hid, self.spatial_hid, do_prob)
+        # ------- semantic feature -------#
+        # self.fc_sem = FC(300, n_hid)
+        self.fc_sem = MLP(300, self.sem_hid, self.sem_hid, do_prob)
+        # ------- location feature -------#
+        self.fc_loc = MLP(20, self.loc_hid, self.loc_hid, do_prob)
+
+        n_fusion = 0
+        if self.use_vis:
+            n_fusion += self.vis_hid
+            if self.use_cls:
+                n_fusion += self.cls_hid
+        if self.use_sem:
+            n_fusion += self.sem_hid
+
+        if self.mode == 'gating':
+            final_fusion = n_hid
+        elif self.mode == 'concat':
+            final_fusion = 2 * n_hid # for two graphs
+        if self.use_loc:
+            final_fusion += self.loc_hid
+
+        # # ---- sub obj concat ---------#
+        # self.fc_so_vis = FC(n_hid*2, n_hid)
+
+        # # ---- sub obj concat ---------#
+        # self.fc_so_sem = FC(n_hid*2, n_hid)
+
+        # ---- all the feature into hidden space -------#
+        #self.fc_fusion = FC(n_fusion, n_hid)
+        self.fc_fusion = FC(final_fusion, n_hid)
+
+        #self.fc_rel = FC(final_fusion, edge_types, relu=False)
+        self.fc_rel = FC(n_hid, edge_types, relu=False)
+
+        if self.use_vis:
+            self.fc_cls = FC(4096, node_types, relu=False)
+        else:
+            self.fc_cls = FC(300, node_types, relu=False)
+        self.fc_cls_feat = FC(node_types, self.cls_hid)
+
+        self.dropout_prob = do_prob
+        self.init_weights()
+
+    def init_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight.data)
+                m.bias.data.fill_(0.1)
+
+    def node2edge(self, x, rel_rec, rel_send):
+        receivers = torch.matmul(rel_rec, x)
+        senders = torch.matmul(rel_send, x)
+        edges = torch.cat([receivers, senders], dim=2)
+        return edges
+
+    def edge2node(self, x, rel_rec, rel_send):
+        new_rec_rec = rel_rec.permute(0,2,1)
+        weight_rec = torch.sum(new_rec_rec, -1).float()
+        weight_rec = weight_rec + (weight_rec==0).float()
+        weight_rec = torch.unsqueeze(weight_rec, -1).expand(weight_rec.size(0), weight_rec.size(1), x.size(-1))
+        incoming = torch.matmul(new_rec_rec, x)
+        incoming = incoming / weight_rec
+
+        new_rec_send = rel_send.permute(0,2,1)
+        weight_send = torch.sum(new_rec_send, -1).float()
+        weight_send = weight_send + (weight_send==0).float()
+        weight_send = torch.unsqueeze(weight_send, -1).expand(weight_send.size(0), weight_send.size(1), x.size(-1))
+        outgoing = torch.matmul(new_rec_send, x)
+        outgoing = outgoing / weight_send
+
+        nodes = torch.cat([incoming, outgoing], -1)
+        # nodes = (incoming + outgoing) * 0.5
+        # nodes = incoming + outgoing
+        # nodes = outgoing
+        # nodes = incoming
+        return nodes
+
+    def forward(self, inputs, spatial_feats, rel_rec, rel_send, bbox_loc):
+        x = inputs.view(inputs.size(0), inputs.size(1), -1)
+        batch_size = inputs.size(0)
+        n_atoms = inputs.size(1)
+        n_edges = rel_rec.size(1)
+
+        if self.use_vis:
+            x_v = self.fc_vis(x[:, :, :4096])   #[batch_size, num_nodes, n_hid]
+            # node_feats = x_v
+            vis_node_feats = x_v
+            if self.use_sem:
+                x_s = self.fc_sem(x[:, :, 4096:])   #[batch_size, num_nodes, n_hid]
+                #node_feats = torch.cat([node_feats, x_s], -1)
+                lin_node_feats = x_s
+            x_cls = self.fc_cls(x[:, :, :4096])
+            # if self.use_cls:
+            #     e_cls = self.fc_cls_feat(x_cls)
+            #     node_feats = torch.cat([node_feats, e_cls], -1)
+        # else:
+        #     x_s = self.fc_sem(x)
+        #     node_feats = x_s
+        #     x_cls = self.fc_cls(x)
+
+        #node_feats = self.fc_fusion(node_feats)
+
+        # if self.use_spatial:
+        #     x_l = self.fc_spatial(spatial_feats)
+        #     edge_feats = x_l
+        # else:
+        #     edge_feats = self.mlp1(self.node2edge(node_feats, rel_rec, rel_send))
+
+        for N in range(1):
+            # do the first message passing node2edge
+            lin_edge_feats = self.lin_mlp1(self.node2edge(lin_node_feats, rel_rec, rel_send)) # may be [batch_size, num_edges, n_hid]
+            vis_edge_feats = self.vis_mlp1(self.node2edge(vis_node_feats, rel_rec, rel_send)) # may be [batch_size, num_edges, n_hid]
+
+            # exchange information between modalities
+            if self.intermediate == True:
+                # Linear Fusion
+                exchanged_feats = self.exchange(torch.cat([lin_edge_feats, vis_edge_feats], -1))# [batch_size, num_edges, 2*n_hid]
+                #exchanged_feats = self.block_exchange([lin_edge_feats.reshape(-1,self.sem_hid), vis_edge_feats.reshape(-1, self.vis_hid)]).reshape(lin_edge_feats.shape[0], lin_edge_feats.shape[1], -1)# [batch_size, num_edges, 2*n_hid]
+                # linguistic feats after exchange
+                x = exchanged_feats[:,:,:self.sem_hid] + lin_edge_feats # [batch_size, num_edges, n_hid] # skip connection
+                # visual feats after exchanged
+                y = exchanged_feats[:,:,self.sem_hid:] + vis_edge_feats # [batch_size, num_edges, n_hid]
+                # Gating fusion
+                # x = self.sigmoid(self.W_ll(lin_edge_feats) + self.W_lv(vis_edge_feats))
+                # y = self.sigmoid(self.W_vl(lin_edge_feats) + self.W_vv(vis_edge_feats))
+            else:
+                x = lin_edge_feats
+                y = vis_edge_feats
+
+            # linguistic message passing edge2node
+            x = self.lin_mlp_e2n(self.edge2node(x, rel_rec, rel_send))
+            x = self.lin_mlp2(x)
+            # self.node_feats = x
+            x = self.node2edge(x, rel_rec, rel_send)
+            # [e_{ij}^1; e_{ij}^2]
+            x = torch.cat((x, lin_edge_feats), dim=2)  # Skip connection
+            self.lin_edge_feats = self.lin_mlp3(x)
+
+
+            # visual message passing edge2node
+            y = self.vis_mlp_e2n(self.edge2node(y, rel_rec, rel_send))
+            y = self.vis_mlp2(y)
+            # self.node_feats = y
+            y = self.node2edge(y, rel_rec, rel_send)
+
+            # [e_{ij}^1; e_{ij}^2]
+            y = torch.cat((y, vis_edge_feats), dim=2)  # Skip connection
+            self.vis_edge_feats = self.vis_mlp3(y)
+
+
+        if self.mode == 'gating':
+            self.edge_feats = self.sigmoid(torch.matmul(self.lin_edge_feats, self.lin_gate) + torch.matmul(self.vis_edge_feats, self.vis_gate) + self.gate_bias) #nhid
+            #self.edge_feats = self.sigmoid(torch.matmul(self.lin_edge_feats, self.lin_gate)) + self.sigmoid(torch.matmul(self.vis_edge_feats, self.vis_gate)) + self.gate_bias #nhid
+        elif self.mode == 'concat':
+            self.edge_feats = torch.cat([self.lin_edge_feats, self.vis_edge_feats], -1) # 2*nhid
+        if self.use_loc:
+            e_loc = self.fc_loc(bbox_loc)
+            self.edge_feats = torch.cat([self.edge_feats, e_loc], -1)
+
+        self.edge_feats = self.fc_fusion(self.edge_feats)
+        output = self.fc_rel(self.edge_feats)
+
+        return output, x_cls
+'''
+'''
+class NMPEncoder(nn.Module): # intermediate node fusion
+    def __init__(self, n_hid, edge_types=71, node_types=101, n_iter=2, do_prob=0., use_vis=True, use_spatial=False, use_sem=True, use_loc=False, use_cls=False):
+        super(NMPEncoder, self).__init__()
+        self.use_vis = use_vis
+        self.use_spatial = use_spatial
+        self.use_sem = use_sem
+        self.use_loc = use_loc
+        self.use_cls = use_cls
+
+        self.mode = 'gating'
+        self.n_iter = n_iter
+
+        self.vis_hid = n_hid # why 128? why not n_hid
+        self.sem_hid = n_hid # default 512
+        self.spatial_hid = n_hid
+        self.loc_hid = 64
+        self.cls_hid = 64
+
+        self.lin_mlp1 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.lin_mlp2 = MLP(n_hid, n_hid, n_hid, do_prob)
+        self.lin_mlp3 = MLP(n_hid * 3, n_hid, n_hid, do_prob)
+
+        self.vis_mlp1 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.vis_mlp2 = MLP(n_hid, n_hid, n_hid, do_prob)
+        self.vis_mlp3 = MLP(n_hid * 3, n_hid, n_hid, do_prob)
+
+        self.mlp4 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.mlp5 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+
+        self.lin_mlp_e2n = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+        self.vis_mlp_e2n = MLP(n_hid * 2, n_hid, n_hid, do_prob)
+
+        # gate
+        lin_gate = torch.randn((n_hid, n_hid), requires_grad = True)
+        vis_gate = torch.randn((n_hid, n_hid), requires_grad = True)
+        gate_bias = torch.randn(n_hid, requires_grad = True)
+        self.lin_gate = torch.nn.Parameter(lin_gate)
+        self.vis_gate = torch.nn.Parameter(vis_gate)
+        self.gate_bias = torch.nn.Parameter(gate_bias)
+        self.sigmoid = torch.nn.Sigmoid()
+
+        # intermediate fusion
+        self.intermediate_edge = True
+        self.intermediate_node = False
+        self.exchange_edge1 = MLP(n_hid * 2, n_hid * 2, n_hid * 2, do_prob)
+        self.exchange_node1 = MLP(n_hid * 2, n_hid * 2, n_hid * 2, do_prob)
+        self.exchange_node2 = MLP(n_hid * 2, n_hid * 2, n_hid * 2, do_prob)
+        # ------- visual feature ---------#
+        # self.fc_vis = FC(4096, n_hid)
+        self.fc_vis = MLP(4096, self.vis_hid, self.vis_hid, do_prob)
+        # ------ spatial feature ---------#
+        # self.fc_spatial = FC(512, n_hid)
+        self.fc_spatial = MLP(512, self.spatial_hid, self.spatial_hid, do_prob)
+        # ------- semantic feature -------#
+        # self.fc_sem = FC(300, n_hid)
+        self.fc_sem = MLP(300, self.sem_hid, self.sem_hid, do_prob)
+        # ------- location feature -------#
+        self.fc_loc = MLP(20, self.loc_hid, self.loc_hid, do_prob)
+
+        n_fusion = 0
+        if self.use_vis:
+            n_fusion += self.vis_hid
+            if self.use_cls:
+                n_fusion += self.cls_hid
+        if self.use_sem:
+            n_fusion += self.sem_hid
+
+        if self.mode == 'gating':
+            final_fusion = n_hid
+        elif self.mode == 'concat':
+            final_fusion = 2 * n_hid # for two graphs
+        if self.use_loc:
+            final_fusion += self.loc_hid
+
+        # # ---- sub obj concat ---------#
+        # self.fc_so_vis = FC(n_hid*2, n_hid)
+
+        # # ---- sub obj concat ---------#
+        # self.fc_so_sem = FC(n_hid*2, n_hid)
+
+        # ---- all the feature into hidden space -------#
+        #self.fc_fusion = FC(n_fusion, n_hid)
+        self.fc_fusion = FC(final_fusion, n_hid)
+
+        #self.fc_rel = FC(final_fusion, edge_types, relu=False)
+        self.fc_rel = FC(n_hid, edge_types, relu=False)
+
+        if self.use_vis:
+            self.fc_cls = FC(4096, node_types, relu=False)
+        else:
+            self.fc_cls = FC(300, node_types, relu=False)
+        self.fc_cls_feat = FC(node_types, self.cls_hid)
+
+        self.dropout_prob = do_prob
+        self.init_weights()
+
+    def init_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight.data)
+                m.bias.data.fill_(0.1)
+
+    def node2edge(self, x, rel_rec, rel_send):
+        receivers = torch.matmul(rel_rec, x)
+        senders = torch.matmul(rel_send, x)
+        edges = torch.cat([receivers, senders], dim=2)
+        return edges
+
+    def edge2node(self, x, rel_rec, rel_send):
+        new_rec_rec = rel_rec.permute(0,2,1)
+        weight_rec = torch.sum(new_rec_rec, -1).float()
+        weight_rec = weight_rec + (weight_rec==0).float()
+        weight_rec = torch.unsqueeze(weight_rec, -1).expand(weight_rec.size(0), weight_rec.size(1), x.size(-1))
+        incoming = torch.matmul(new_rec_rec, x)
+        incoming = incoming / weight_rec
+
+        new_rec_send = rel_send.permute(0,2,1)
+        weight_send = torch.sum(new_rec_send, -1).float()
+        weight_send = weight_send + (weight_send==0).float()
+        weight_send = torch.unsqueeze(weight_send, -1).expand(weight_send.size(0), weight_send.size(1), x.size(-1))
+        outgoing = torch.matmul(new_rec_send, x)
+        outgoing = outgoing / weight_send
+
+        nodes = torch.cat([incoming, outgoing], -1)
+        # nodes = (incoming + outgoing) * 0.5
+        # nodes = incoming + outgoing
+        # nodes = outgoing
+        # nodes = incoming
+        return nodes
+
+    def forward(self, inputs, spatial_feats, rel_rec, rel_send, bbox_loc):
+        x = inputs.view(inputs.size(0), inputs.size(1), -1)
+        batch_size = inputs.size(0)
+        n_atoms = inputs.size(1)
+        n_edges = rel_rec.size(1)
+
+        if self.use_vis:
+            x_v = self.fc_vis(x[:, :, :4096])   #[batch_size, num_nodes, n_hid]
+            # node_feats = x_v
+            vis_node_feats = x_v
+            if self.use_sem:
+                x_s = self.fc_sem(x[:, :, 4096:])   #[batch_size, num_nodes, n_hid]
+                #node_feats = torch.cat([node_feats, x_s], -1)
+                lin_node_feats = x_s
+            x_cls = self.fc_cls(x[:, :, :4096])
+            # if self.use_cls:
+            #     e_cls = self.fc_cls_feat(x_cls)
+            #     node_feats = torch.cat([node_feats, e_cls], -1)
+        # else:
+        #     x_s = self.fc_sem(x)
+        #     node_feats = x_s
+        #     x_cls = self.fc_cls(x)
+
+        #node_feats = self.fc_fusion(node_feats)
+
+        # if self.use_spatial:
+        #     x_l = self.fc_spatial(spatial_feats)
+        #     edge_feats = x_l
+        # else:
+        #     edge_feats = self.mlp1(self.node2edge(node_feats, rel_rec, rel_send))
+
+        # intermediate node fusion 1
+        if self.intermediate_node == True:
+            exchanged_feats = self.exchange_node1(torch.cat([lin_node_feats, vis_node_feats], -1))# [batch_size, num_edges, 2*n_hid]
+            # linguistic feats after exchange
+            lin_node_feats = exchanged_feats[:,:,:self.sem_hid] + lin_node_feats # [batch_size, num_edges, n_hid] # skip connection
+            # visual feats after exchanged
+            vis_node_feats = exchanged_feats[:,:,self.sem_hid:] + vis_node_feats # [batch_size, num_edges, n_hid]
+
+        # do the first message passing node2edge
+        lin_edge_feats = self.lin_mlp1(self.node2edge(lin_node_feats, rel_rec, rel_send)) # may be [batch_size, num_edges, n_hid]
+        vis_edge_feats = self.vis_mlp1(self.node2edge(vis_node_feats, rel_rec, rel_send)) # may be [batch_size, num_edges, n_hid]
+
+        # intermediate edge fusion 1
+        if self.intermediate_edge == True:
+            exchanged_feats = self.exchange_edge1(torch.cat([lin_edge_feats, vis_edge_feats], -1))# [batch_size, num_edges, 2*n_hid]
+            # linguistic feats after exchange
+            x = exchanged_feats[:,:,:self.sem_hid] + lin_edge_feats # [batch_size, num_edges, n_hid] # skip connection
+            # visual feats after exchanged
+            y = exchanged_feats[:,:,self.sem_hid:] + vis_edge_feats # [batch_size, num_edges, n_hid]
+        else:
+            x = lin_edge_feats
+            y = vis_edge_feats
+
+        # linguistic message passing edge2node
+        x = self.lin_mlp_e2n(self.edge2node(x, rel_rec, rel_send))
+        x = self.lin_mlp2(x)
+        # self.node_feats = x
+        # visual message passing edge2node
+        y = self.vis_mlp_e2n(self.edge2node(y, rel_rec, rel_send))
+        y = self.vis_mlp2(y)
+        # self.node_feats = y
+
+        # intermediate node fusion2
+        if self.intermediate_node == True:
+            exchanged_feats = self.exchange_node2(torch.cat([x, y], -1))# [batch_size, num_edges, 2*n_hid]
+            # linguistic feats after exchange
+            x = exchanged_feats[:,:,:self.sem_hid] + x # [batch_size, num_edges, n_hid] # skip connection
+            # visual feats after exchanged
+            y = exchanged_feats[:,:,self.sem_hid:] + y # [batch_size, num_edges, n_hid]
+
+        # linguistic message passing node2edge
+        x = self.node2edge(x, rel_rec, rel_send)
+        # [e_{ij}^1; e_{ij}^2]
+        x = torch.cat((x, lin_edge_feats), dim=2)  # Skip connection
+        self.lin_edge_feats = self.lin_mlp3(x)
+        # visual message passing node2edge
+        y = self.node2edge(y, rel_rec, rel_send)
+        # [e_{ij}^1; e_{ij}^2]
+        y = torch.cat((y, vis_edge_feats), dim=2)  # Skip connection
+        self.vis_edge_feats = self.vis_mlp3(y)
+
+
+        if self.mode == 'gating':
+            self.edge_feats = self.sigmoid(torch.matmul(self.lin_edge_feats, self.lin_gate) + torch.matmul(self.vis_edge_feats, self.vis_gate) + self.gate_bias) #nhid
+            #self.edge_feats = self.sigmoid(torch.matmul(self.lin_edge_feats, self.lin_gate)) + self.sigmoid(torch.matmul(self.vis_edge_feats, self.vis_gate)) + self.gate_bias #nhid
+        elif self.mode == 'concat':
+            self.edge_feats = torch.cat([self.lin_edge_feats, self.vis_edge_feats], -1) # 2*nhid
+        if self.use_loc:
+            e_loc = self.fc_loc(bbox_loc)
+            self.edge_feats = torch.cat([self.edge_feats, e_loc], -1)
+
+        self.edge_feats = self.fc_fusion(self.edge_feats)
+        output = self.fc_rel(self.edge_feats)
+
+        return output, x_cls
+'''
