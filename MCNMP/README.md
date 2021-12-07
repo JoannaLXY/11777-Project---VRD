@@ -73,26 +73,12 @@ recall_50: 0.9013 recall_100: 0.9628
 
 
 
-## For two graphs
+## MCNMP
 
-Build a graph for each modality. 
-
-Currently, a simple **intermediate** fusion method is employed: 
-
-1. concatenate two corresponding edge features (one from linguistic graph, the other from visual graph)(2*n_hid-dim);
-2. pass through an MLP, get a 2*n_hid-dim vector;
-3. fetch the first n_hid-dim for linguistic and the second n_hid-dim for visual;
-4. add a residual connection.
-
-Two **final** fusion methods:
-
-1. concatenate
-
-2. gating mechanism: 
-   $$
-   output = Sigmoid(F_vW_v + F_lW_l + bias)
-   $$
-
+Build a graph for each modality.  Conduct intermediate fusion via gating mechanism.
+$$
+output = Sigmoid(F_vW_v + F_lW_l + bias)
+$$
 After training for 50 epochs with intermediate fusion and gating mechanism, you should expect to see results as following.
 
 ```python
@@ -102,7 +88,7 @@ recall_50: 0.5710 recall_100: 0.5710
 recall_50: 0.9036 recall_100: 0.9669
 ```
 
-### TODO
+### Further work
 
-Looking for more sophisticated intermediate/final fusion approaches or structural modifications.
+Looking for more sophisticated gating functions which are robust against long-tailed data distributions.
 
