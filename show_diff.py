@@ -102,28 +102,34 @@ def draw_box_preds_in_image(img_path, gt_list, pred_list, pair_name):
     right_table = np.zeros((rgb_img.shape[0], 200, 3),dtype=np.uint8)
     left_table.fill(255)
     right_table.fill(255)
-    y0, dy = 30, 15
+    y0, dy = 10, 15
+    gts = set()
     for i, predicate in enumerate(gt_list):
         text = predicate[0] + ": " + str(predicate[1])
+        gts.add(predicate[0])
         y = y0 + i * dy
         cv2.putText(left_table, text, (5, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255))
+    exist = False
     for i, predicate in enumerate(pred_list):
+        if predicate[0] in gts:
+            exist = True
         text = predicate[0] + ": " + str(predicate[1])
         y = y0 + i * dy
         cv2.putText(right_table, text, (5, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255))
     vis_img = np.hstack([left_table, rgb_img, right_table])
-    return vis_img
+    return vis_img, exist
 
 ###START OF THE MAIN PROGARM###
-path_to_dataset = "/home/lixuanyi199801/11777-Project-VRD/nmp/dataset/vrd/sg_dataset"
-path_to_json_dataset = "/home/lixuanyi199801/11777-Project-VRD/nmp/dataset/vrd/json_dataset"
-path_to_result = "/home/lixuanyi199801/11777-Project-VRD/nmp_res_rec50_top1.pkl"
-output_dirs = "/home/lixuanyi199801/vrd_vis_rec50_top1"
+path_to_dataset = "/Users/lixuanyi/Desktop/CMU/Fall2021/11777/sg_dataset"
+path_to_json = "/Users/lixuanyi/Desktop/CMU/Fall2021/11777/11777-Project-VRD/block.bootstrap.pytorch/data/vrd/annotations/raw"
+path_to_result_baseline = "/Users/lixuanyi/Desktop/CMU/Fall2021/11777/11777-Project-VRD/nmp_res_rec50_top70.pkl"
+path_to_result = "/Users/lixuanyi/Downloads/nmp_res_rec50_top70.pkl"
+# output_dirs = "/Users/lixuanyi/Desktop/CMU/Fall2021/11777/11777-Project-VRD/res_vis3"
 
 # load ground truth
 img_dir = join(path_to_dataset, "sg_test_images")
 gt_imgs = glob.glob(join(img_dir, "*"))
-gt_annos = json.load(open(join(path_to_json_dataset, "annotations_test.json"), 'r'))
+gt_annos = json.load(open(join(path_to_json, "annotations_test.json"), 'r'))
 # gt_annos = parse_annos(gt_annos)
 # # should have 1000 test images
 # assert len(gt_imgs) == 1000
@@ -136,26 +142,39 @@ gts = generate_gts_v2(gt_annos)
 
 # load predictions
 preds = pickle.load(open(path_to_result, "rb"))
+preds_baseline = pickle.load(open(path_to_result_baseline, "rb"))
+
+# preds = preds[50]
+# print(len(preds.keys()))
+# preds_baseline = preds_baseline[50]
 # should have 1000 test results
 # assert len(preds.keys()) == 1000
 
 # iterate over GT annos
 for img_name, anno in tqdm(gt_annos.items()):
-    if img_name not in preds:
-        continue
-    os.makedirs(join(output_dirs,img_name), exist_ok=True)
-    #relations = anno["relationships"]
-    #objects = anno["objects"]
+    # os.makedirs(join(output_dirs,img_name), exist_ok=True)
+    # relations = anno["relationships"]
+    # objects = anno["objects"]
     # get prediction result and gt
-    pred = preds[img_name]
-    gt = gts[img_name]
-    for pair_name, gt_list in gt.items():
-        # if this pair NOT exists in prediction, append "N_"
-        prefix = "N_"
-        pred_list = []
-        if pair_name in pred:
-            # if this pair exists in prediction, append "Y_"
-            prefix = "Y_"
-            pred_list = pred[pair_name]
-        vis_img = draw_box_preds_in_image(join(img_dir, img_name), gt_list, pred_list, pair_name)
-        cv2.imwrite(join(output_dirs, img_name, prefix+pair_name+".png"), vis_img)
+    if img_name in preds:
+        pred = preds[img_name]
+        pred_baseline = preds_baseline[img_name]
+        gt = gts[img_name]
+        for pair_name, gt_list in gt.items():
+            # if this pair NOT exists in prediction, append "N_"
+            prefix = "N_"
+            pred_list = []
+            if pair_name in pred and len(pred[pair_name])>0:
+                # if this pair exists in prediction, append "Y_"
+                prefix = "Y_"
+                pred_list = pred[pair_name]
+                pred_list_baseline = pred_baseline[pair_name]
+            vis_img, exist = draw_box_preds_in_image(join(img_dir, img_name), gt_list, pred_list, pair_name)
+            vis_img, exist_baseline = draw_box_preds_in_image(join(img_dir, img_name), gt_list, pred_list_baseline, pair_name)
+            # cv2.imwrite(join(output_dirs, img_name, prefix+pair_name+".png"), vis_img)
+            # print(exist, exist_baseline)
+            if exist_baseline and not exist:
+                print("exist in baseline but not in new", img_name, img_name, pair_name)
+            if not exist_baseline and exist:
+                print("not exist in baseline but in new", img_name, img_name, pair_name)
+    

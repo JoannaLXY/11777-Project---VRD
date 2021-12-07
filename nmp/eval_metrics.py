@@ -5,7 +5,8 @@ import ipdb
 import time
 from tqdm import tqdm
 from utils import read_roidb, compute_iou_each
-
+from collections import defaultdict
+import pickle
 
 def graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=False):
 	'''
@@ -93,7 +94,6 @@ def graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', top
 def compute_overlap(det_bboxes, gt_bboxes):
     """
     Compute overlap of detected and ground truth boxes.
-
     Inputs:
         - det_bboxes: array (2, 4), 2 x [y_min, y_max, x_min, x_max]
             The detected bounding boxes for subject and object
@@ -177,21 +177,64 @@ def roidb2list(test_roidb, pred_roidb, mode='pred', topk=False, is_zs=False, dat
 		gt_bboxes.append(gt_box)
 	return det_labels, det_bboxes, gt_labels, gt_bboxes
 
-def eval_result(test_roidb, pred_roidb, N_recall, is_zs=False, mode='pred', topk=False, dataset='vrd'):
+def eval_result(test_roidb, pred_roidb, N_recall, is_zs=False, mode='pred', topk=False, dataset='vrd', vis=False):
 	det_labels, det_bboxes, gt_labels, gt_bboxes = \
 		roidb2list(test_roidb, pred_roidb, mode=mode, topk=topk, is_zs=is_zs, dataset=dataset)
+	predicates = ["on", "wear", "has", "next to", "sleep next to", "sit next to", "stand next to", "park next",
+				  "walk next to", "above", "behind", "stand behind", "sit behind", "park behind", "in the front of",
+				  "under", "stand under", "sit under", "near", "walk to", "walk", "walk past", "in", "below", "beside",
+				  "walk beside", "over", "hold", "by", "beneath", "with", "on the top of", "on the left of",
+				  "on the right of", "sit on", "ride", "carry", "look", "stand on", "use", "at", "attach to", "cover",
+				  "touch", "watch", "against", "inside", "adjacent to", "across", "contain", "drive", "drive on",
+				  "taller than", "eat", "park on", "lying on", "pull", "talk", "lean on", "fly", "face", "play with",
+				  "sleep on", "outside of", "rest on", "follow", "hit", "feed", "kick", "skate on"]
+	objects = ["person", "sky", "building", "truck", "bus", "table", "shirt", "chair", "car", "train", "glasses",
+			   "tree", "boat", "hat", "trees", "grass", "pants", "road", "motorcycle", "jacket", "monitor", "wheel",
+			   "umbrella", "plate", "bike", "clock", "bag", "shoe", "laptop", "desk", "cabinet", "counter", "bench",
+			   "shoes", "tower", "bottle", "helmet", "stove", "lamp", "coat", "bed", "dog", "mountain", "horse",
+			   "plane", "roof", "skateboard", "traffic light", "bush", "phone", "airplane", "sofa", "cup", "sink",
+			   "shelf", "box", "van", "hand", "shorts", "post", "jeans", "cat", "sunglasses", "bowl", "computer",
+			   "pillow", "pizza", "basket", "elephant", "kite", "sand", "keyboard", "plant", "can", "vase",
+			   "refrigerator", "cart", "skis", "pot", "surfboard", "paper", "mouse", "trash can", "cone", "camera",
+			   "ball", "bear", "giraffe", "tie", "luggage", "faucet", "hydrant", "snowboard", "oven", "engine", "watch",
+			   "face", "street", "ramp", "suitcase"]
+	output = {}
 	relationships_found = 0
 	n_re = N_recall
 	all_relationships = sum(labels.shape[0] for labels in gt_labels)
+	curr_img_id = 0
 	for item in zip(det_labels, det_bboxes, gt_labels, gt_bboxes):
+		curr_img_name = os.path.basename(test_roidb[curr_img_id]["image"])
+		# for each image, create a folder and save one image for each gt pair of sub-obj
+		pairs = defaultdict(list)
 		(det_lbls, det_bxs, gt_lbls, gt_bxs) = item
 		if not det_lbls.any() or not gt_lbls.any():
 			continue  # omit empty detection matrices
 		gt_detected = np.zeros(gt_lbls.shape[0])
 		# det_score = np.sum(np.log(det_lbls[:, 0:3]), axis=1)
 		det_score = det_lbls[:,1]
-		inds = np.argsort(det_score)[::-1][:n_re]  # at most n_re predictions
-		for det_box, det_label in zip(det_bxs[inds, :], det_lbls[inds, 3:]):
+		inds = np.argsort(det_score)[::-1][:n_re]  # at most n_re predictions for each image
+		for det_box, det_label, det_s in zip(det_bxs[inds, :], det_lbls[inds, 3:], det_score[inds]):
+			# find matched pair
+			paired_gt_id = find_paired_gt_id(det_box, gt_bxs, det_label, gt_lbls)
+			sub, pred, obj = objects[int(gt_lbls[paired_gt_id, 0])], predicates[int(gt_lbls[paired_gt_id, 1])], \
+							 objects[int(gt_lbls[paired_gt_id, 2])]
+			sub_box, obj_box = gt_bxs[paired_gt_id, 0], gt_bxs[paired_gt_id, 1]
+			# sanity check for predicate prediction task, sub and obj same as gt
+			det_sub, det_obj = objects[int(det_label[0])], objects[int(det_label[2])]
+			assert (det_sub == sub and det_obj == obj)
+			# get sub_str and obj_str
+			sub_str = "_".join([str(int(sub_box[1])), str(int(sub_box[3])), str(int(sub_box[0])), str(int(sub_box[2]))])
+			obj_str = "_".join([str(int(obj_box[1])), str(int(obj_box[3])), str(int(obj_box[0])), str(int(obj_box[2]))])
+			key_name = "_".join([sub, sub_str, obj, obj_str])
+			if int(det_label[1]) <= len(predicates)-1:
+				# only put valid labels
+				our_label = predicates[int(det_label[1])]
+				pairs[key_name].append((our_label, det_s))
+
+			# this overlaps only calculated on pred when its label == gt label
+			# because "not any(det_label-gt_label)" only return true when sub-pred-obj all same as gt_label
+			# here in predicate pred case, sub,obj must be same, so only return true when pred is same as gt label
 			overlaps = np.array([
 				max(compute_overlap(det_box, gt_box), 0.499)
 				if detected == 0 and not any(det_label - gt_label)
@@ -202,5 +245,32 @@ def eval_result(test_roidb, pred_roidb, N_recall, is_zs=False, mode='pred', topk
 			if (overlaps >= 0.5).any():
 				gt_detected[np.argmax(overlaps)] = 1
 				relationships_found += 1
+
+		output[curr_img_name] = pairs
+		curr_img_id += 1
+	# only save results when vis=True
+	if vis:
+		if topk:
+			# save results for top70+recall50
+			with open("/home/lixuanyi199801/11777-Project-VRD/nmp_res_rec%d_top70.pkl"%(n_re), 'wb') as f:
+				pickle.dump(output, f, protocol=pickle.HIGHEST_PROTOCOL)
+		else:
+			# save results for top1+recall50
+			with open("/home/lixuanyi199801/11777-Project-VRD/nmp_res_rec%d_top1.pkl"%(n_re), 'wb') as f:
+				pickle.dump(output, f, protocol=pickle.HIGHEST_PROTOCOL)
+
 	return float(relationships_found / all_relationships)
 
+
+def find_paired_gt_id(det_box, gt_bxs, det_label, gt_lbls):
+	overlaps = np.array([
+		max(compute_overlap(det_box, gt_box), 0.499)
+		if (det_label[0]==gt_label[0]) and (det_label[2]==gt_label[2])
+		else 0
+		for gt_box, gt_label
+		in zip(gt_bxs, gt_lbls)
+	])
+	# for predicate task, must have exact match between boxes
+	assert max(overlaps) == 1.0
+	found_pair_id = np.argmax(overlaps)
+	return found_pair_id

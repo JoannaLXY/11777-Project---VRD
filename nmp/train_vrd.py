@@ -172,7 +172,7 @@ else:
 # ===================== Model Definition ========================#
 
 if args.encoder == 'nmp':
-    model = UpdatedNMPEncoder(args.hidden,
+    model = UpdatedNMPEncoder_v4(args.hidden,
                        edge_types=args.edge_types, node_types=args.node_types, n_iter=args.n_iter,
                        do_prob=args.dropout, use_vis=use_vis, use_spatial=use_spatial, use_sem=use_sem, use_loc=args.use_loc, use_cls=args.use_cls)
 elif args.encoder == 'simple':
@@ -520,8 +520,8 @@ def eval(roidb, test_loader, is_rela=False):
     if is_rela:
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='rela', level='image', topk=False)
         rela_pred_roidb = graph_npy2roidb(roidb, rela_pred_probs, rela_pred_cls, mode='rela', level='image', topk=False)
-        recall_50 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 50, is_zs=False, mode='rela', topk=False)
-        recall_100 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 100, is_zs=False, mode='rela', topk=False)
+        recall_50 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 50, is_zs=False, mode='rela', topk=False, vis=True)
+        recall_100 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 100, is_zs=False, mode='rela', topk=False, vis=True)
         zs_recall_50 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 50, is_zs=True, mode='rela', topk=False)
         zs_recall_100 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 100, is_zs=True, mode='rela', topk=False)
         
@@ -538,8 +538,8 @@ def eval(roidb, test_loader, is_rela=False):
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=False)
         # vis_img = vis_graph(roidb, pred_roidb)
         # recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
-        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False)
-        recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=False)
+        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=False, vis=True)
+        recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=False, vis=True)
         # zero shot
         # zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=False)
         # zs_recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=True, mode='pred', topk=False)
@@ -645,7 +645,7 @@ def eval_topk(roidb, test_loader, is_rela=False, k=70):
     if is_rela:
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='rela', level='image', topk=True)
         rela_pred_roidb = graph_npy2roidb(roidb, rela_pred_probs, rela_pred_cls, mode='rela', level='image', topk=True)
-        recall_50 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 50, is_zs=False, mode='rela', topk=True)
+        recall_50 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 50, is_zs=False, mode='rela', topk=True, vis=True)
         recall_100 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 100, is_zs=False, mode='rela', topk=True)
         zs_recall_50 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 50, is_zs=True, mode='rela', topk=True)
         zs_recall_100 = eval_result(roidb, rela_pred_roidb['pred_roidb'], 100, is_zs=True, mode='rela', topk=True)
@@ -659,8 +659,8 @@ def eval_topk(roidb, test_loader, is_rela=False, k=70):
         # np.save(os.path.join(load_folder, 'rela_pred_cls'), pred_cls)
     else:
         pred_roidb = graph_npy2roidb(roidb, pred_probs, pred_cls, mode='pred', level='image', topk=True)
-        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=True)
-        recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=True)
+        recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=False, mode='pred', topk=True, vis=True)
+        recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=False, mode='pred', topk=True, vis=True)
         # zero shot
         # zs_recall_50 = eval_result(roidb, pred_roidb['pred_roidb'], 50, is_zs=True, mode='pred', topk=True)
         # zs_recall_100 = eval_result(roidb, pred_roidb['pred_roidb'], 100, is_zs=True, mode='pred', topk=True)
